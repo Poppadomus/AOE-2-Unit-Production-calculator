@@ -1,0 +1,2369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3969277516359177"
+     crossorigin="anonymous"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>QueueCalc – AoE2 DE Production & Cost Calculator</title>
+    <meta name="title" content="QueueCalc – AoE2 DE Building, Upgrade & Unit Production Calculator" />
+    <meta name="description" content="The AIO Age Of Empires 2: DE build order, continuous unit production calculator and strategy guide" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://queuecalc.com/" />
+    <meta property="og:title" content="QueueCalc – AoE2 DE Production & Cost Calculator" />
+    <meta property="og:description" content="Precise resource & villager calculator for Age of Empires 2 Definitive Edition: buildings, upgrades, techs, age advances and non-stop unit production." />
+    <meta property="og:image" content="https://queuecalc.com/og-image.jpg" />
+    <meta property="og:image:alt" content="QueueCalc AoE2 calculator interface" />
+    <meta property="og:site_name" content="QueueCalc" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="QueueCalc – AoE2 DE Production Calculator" />
+    <meta name="twitter:description" content="Resource, villager and queue time calculator for Age of Empires II Definitive Edition." />
+    <meta name="twitter:image" content="https://queuecalc.com/og-image.jpg" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" as="style" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" media="print" onload="this.media='all'" />
+    <meta name="theme-color" content="#8B5A2B" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#5C4033" media="(prefers-color-scheme: dark)" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="QueueCalc" />
+    <link rel="canonical" href="https://queuecalc.com/" />
+</head>
+
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+
+        :root{
+            --quote-height:60px;
+            --primary-gold:#d4af37;
+            --light-gold:#f4d03f;
+            --dark-bg:#0f172a;
+            --card-bg:rgba(26,31,58,0.8);
+            --text-light:#f5f1e8;
+            --accent-green:#51cf66;
+            --accent-red:#ff6b6b;
+            --food-color:#ff6b6b;
+            --wood-color:#cd7f32;
+            --gold-color:#ffd700;
+            --stone-color:#95a5a6;
+            --border-gold-low:rgba(212,175,55,0.2);
+            --border-gold-med:rgba(212,175,55,0.3);
+            --border-gold-low15:rgba(212,175,55,0.15);
+            --bg-dark-med:rgba(10,14,39,0.7);
+            --bg-light-gold-low:rgba(244,208,63,0.1);
+            --transition:0.3s ease
+        }
+
+        body{
+            font-family:'Lora',serif;
+            background:linear-gradient(135deg,var(--dark-bg) 0%,#1a1f3a 100%);
+            color:var(--text-light);
+            min-height:100vh;
+            padding:var(--quote-height) 1rem 2rem;
+            position:relative;
+            line-height:1.5
+        }
+
+        body::before{
+            content:'';
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,0.05);
+            pointer-events:none;
+            z-index:1
+        }
+
+        .container{
+            max-width:1400px;
+            margin:0 auto;
+            position:relative;
+            z-index:10
+        }
+
+        header{
+            text-align:center;
+            margin-bottom:2.5rem
+        }
+
+        h1{
+            font-family:'Cinzel',serif;
+            font-size:3rem;
+            color:var(--light-gold);
+            margin-bottom:0.5rem;
+            text-shadow:0 0 15px rgba(244,208,63,0.5)
+        }
+
+        .subtitle{
+            font-family:'Cinzel',serif;
+            font-size:1rem;
+            text-transform:uppercase;
+            letter-spacing:0.2em;
+            color:var(--primary-gold);
+            opacity:0.9
+        }
+
+        .quote-strip{
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            background:rgba(10,14,39,0.95);
+            border-bottom:2px solid var(--primary-gold);
+            padding:0.75rem;
+            text-align:center;
+            z-index:1000;
+            backdrop-filter:blur(10px);
+            box-shadow:0 4px 12px rgba(0,0,0,0.6);
+            height:var(--quote-height);
+            display:flex;
+            align-items:center;
+            justify-content:center
+        }
+
+        #quoteText{
+            font-family:'Cinzel',serif;
+            font-size:0.9rem;
+            color:var(--light-gold);
+            font-style:italic;
+            transition:opacity 0.5s ease
+        }
+
+        .quote-prefix{
+            color:var(--primary-gold);
+            font-weight:700;
+            margin-right:0.3em
+        }
+
+        .tab-buttons{
+            display:flex;
+            justify-content:center;
+            gap:1rem;
+            margin-bottom:2.5rem;
+            flex-wrap:wrap
+        }
+
+        .tab-button{
+            background:var(--bg-dark-med);
+            border:1px solid var(--border-gold-med);
+            color:var(--light-gold);
+            padding:0.8rem 1.8rem;
+            border-radius:6px;
+            cursor:pointer;
+            font-family:'Cinzel',serif;
+            font-size:1rem;
+            font-weight:500;
+            transition:all var(--transition)
+        }
+
+        .tab-button:hover{
+            background:rgba(244,208,63,0.2);
+            border-color:var(--light-gold)
+        }
+
+        .tab-button.active{
+            background:rgba(244,208,63,0.3);
+            border-color:var(--primary-gold);
+            box-shadow:0 4px 10px rgba(255,215,0,0.4)
+        }
+
+        .tab-panel{display:none}
+        .tab-panel.active{display:block}
+
+        .main-grid{display:grid;grid-template-columns:2fr 1fr;gap:3rem}
+
+        .sticky-header{
+            position:sticky;
+            top:var(--quote-height);
+            z-index:90;
+            background:linear-gradient(135deg,var(--dark-bg) 0%,#1a1f3a 100%);
+            padding-bottom:1rem
+        }
+
+        .production-queue-section{
+            background:var(--card-bg);
+            border:1px solid var(--primary-gold);
+            border-radius:8px;
+            padding:1.2rem;
+            margin-bottom:1.5rem;
+            box-shadow:0 4px 12px rgba(0,0,0,0.5)
+        }
+
+        .production-queue-section h2{
+            font-family:'Cinzel',serif;
+            font-size:1.2rem;
+            color:var(--light-gold);
+            margin-bottom:1rem;
+            text-align:center;
+            text-transform:uppercase
+        }
+
+        .queue-list{
+            display:flex;
+            flex-wrap:wrap;
+            gap:0.6rem;
+            min-height:3rem
+        }
+
+        .queue-item{
+            display:flex;
+            align-items:center;
+            gap:0.6rem;
+            background:var(--bg-dark-med);
+            border:1px solid var(--border-gold-med);
+            border-radius:6px;
+            padding:0.6rem 0.9rem;
+            transition:all 0.2s
+        }
+
+        .queue-item:hover{
+            background:rgba(10,14,39,0.9);
+            border-color:var(--light-gold);
+            box-shadow:0 2px 8px rgba(244,208,63,0.15)
+        }
+
+        .queue-item-name{
+            font-family:'Cinzel',serif;
+            font-size:0.95rem;
+            color:var(--light-gold)
+        }
+
+        .queue-item-count{
+            font-size:0.85rem;
+            background:var(--bg-light-gold-low);
+            padding:0.2rem 0.5rem;
+            border-radius:4px
+        }
+
+        .queue-item-remove{
+            background:rgba(255,107,107,0.1);
+            border:1px solid rgba(255,107,107,0.3);
+            color:var(--accent-red);
+            width:1.6rem;
+            height:1.6rem;
+            border-radius:50%;
+            cursor:pointer;
+            font-size:0.9rem;
+            font-weight:bold;
+            transition:all 0.2s
+        }
+
+        .queue-item-remove:hover{
+            background:rgba(255,107,107,0.2);
+            border-color:var(--accent-red)
+        }
+
+        .queue-empty{
+            text-align:center;
+            color:rgba(245,241,232,0.5);
+            font-style:italic;
+            padding:0.8rem;
+            width:100%
+        }
+
+        .search-box input{
+            width:100%;
+            padding:0.9rem;
+            font-size:1rem;
+            border:2px solid var(--border-gold-med);
+            border-radius:8px;
+            background:rgba(245,241,232,0.05);
+            color:var(--light-gold);
+            transition:all var(--transition)
+        }
+
+        .search-box input::placeholder{color:rgba(245,241,232,0.5)}
+
+        .search-box input:focus{
+            outline:none;
+            border-color:var(--light-gold);
+            box-shadow:0 0 10px rgba(255,215,0,0.3)
+        }
+
+        .items-grid,.units-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+            gap:1.2rem
+        }
+
+        .category-header{
+            grid-column:1/-1;
+            font-family:'Cinzel',serif;
+            font-size:1.4rem;
+            color:var(--light-gold);
+            border-bottom:2px solid rgba(244,208,63,0.3);
+            padding:1.2rem 0 0.6rem;
+            margin-top:1.5rem;
+            text-shadow:0 2px 5px rgba(244,208,63,0.2)
+        }
+
+        .subcategory-header{
+            grid-column:1/-1;
+            font-family:'Cinzel',serif;
+            font-size:1.1rem;
+            color:var(--primary-gold);
+            border-bottom:1px solid var(--border-gold-low15);
+            padding:0.6rem 0 0.3rem;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            transition:background 0.2s
+        }
+
+        .subcategory-header:hover{background:rgba(244,208,63,0.1)}
+
+        .toggle-btn{
+            font-weight:bold;
+            min-width:28px;
+            text-align:center;
+            font-size:1.2rem;
+            margin-right:10px;
+            color:var(--light-gold)
+        }
+
+        .subcategory-content{
+            grid-column:1/-1;
+            display:none;
+            grid-template-columns:inherit;
+            gap:inherit;
+            padding-left:1rem
+        }
+
+        .item-card,.unit-card{
+            background:var(--card-bg);
+            border:1px solid var(--border-gold-low);
+            border-radius:8px;
+            padding:1.2rem;
+            transition:all var(--transition);
+            box-shadow:0 4px 10px rgba(0,0,0,0.4);
+            position:relative;
+            overflow:hidden
+        }
+
+        .item-card:hover,.unit-card:hover{
+            border-color:var(--primary-gold);
+            transform:translateY(-5px);
+            box-shadow:0 12px 24px rgba(255,215,0,0.3)
+        }
+
+        .item-card::before,.unit-card::before{
+            content:'';
+            position:absolute;
+            inset:0;
+            background:linear-gradient(135deg,rgba(244,208,63,0.05) 0%,transparent 50%);
+            opacity:0;
+            transition:opacity var(--transition);
+            pointer-events:none
+        }
+
+        .item-card:hover::before,.unit-card:hover::before{opacity:1}
+
+        .item-info,.unit-info{
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            text-align:center;
+            margin-bottom:0.8rem
+        }
+
+        .item-info h3,.unit-info h3{
+            font-family:'Cinzel',serif;
+            font-size:1.1rem;
+            color:var(--light-gold);
+            margin-top:0.4rem
+        }
+
+        .item-costs,.unit-costs{
+            display:flex;
+            flex-direction:column;
+            gap:0.4rem;
+            margin-bottom:0.8rem;
+            border-bottom:1px solid rgba(212,175,55,0.1);
+            padding-bottom:0.8rem;
+            font-size:0.9rem
+        }
+
+        .cost-row{display:flex;justify-content:space-between}
+
+        .cost-label{color:rgba(245,241,232,0.7)}
+
+        .cost-value{color:var(--text-light);font-weight:600}
+
+        .cost-food{color:var(--food-color)}
+        .cost-wood{color:var(--wood-color)}
+        .cost-gold{color:var(--gold-color)}
+        .cost-stone{color:var(--stone-color)}
+
+        .item-counter,.unit-counter{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            background:var(--bg-dark-med);
+            border:1px solid var(--border-gold-low);
+            border-radius:8px;
+            padding:0.6rem
+        }
+
+        button{
+            background:var(--bg-light-gold-low);
+            border:1px solid var(--border-gold-med);
+            padding:0.4rem 0.8rem;
+            cursor:pointer;
+            color:var(--light-gold);
+            font-size:1.2rem;
+            border-radius:6px;
+            font-weight:bold;
+            min-width:40px;
+            transition:all 0.3s
+        }
+
+        button:hover{
+            background:rgba(244,208,63,0.2);
+            border-color:var(--light-gold)
+        }
+
+        .btn-minus:hover{color:var(--accent-red);border-color:var(--accent-red)}
+        .btn-plus:hover{color:var(--accent-green);border-color:var(--accent-green)}
+
+        .item-count,.unit-count{
+            font-family:'Cinzel',serif;
+            font-size:1.3rem;
+            color:var(--light-gold);
+            min-width:3rem;
+            text-align:center
+        }
+
+        .summary-panel{
+            background:var(--card-bg);
+            border:2px solid var(--primary-gold);
+            border-radius:8px;
+            padding:1.8rem;
+            position:sticky;
+            top:calc(var(--quote-height) + 1rem);
+            max-height:calc(100vh - var(--quote-height) - 2rem);
+            overflow-y:auto;
+            box-shadow:0 4px 16px rgba(244,208,63,0.1)
+        }
+
+        .summary-panel h2{
+            font-family:'Cinzel',serif;
+            font-size:1.3rem;
+            color:var(--light-gold);
+            margin-bottom:1.2rem;
+            text-transform:uppercase;
+            text-shadow:0 2px 5px rgba(244,208,63,0.2)
+        }
+
+        .resource-box{
+            background:rgba(10,14,39,0.6);
+            border:1px solid var(--border-gold-low);
+            border-radius:8px;
+            padding:0.9rem;
+            margin-bottom:0.9rem;
+            transition:all var(--transition)
+        }
+
+        .resource-box:hover{
+            border-color:rgba(212,175,55,0.5);
+            box-shadow:0 2px 10px rgba(244,208,63,0.1)
+        }
+
+        .resource-label{
+            font-family:'Cinzel',serif;
+            font-size:0.8rem;
+            color:var(--primary-gold);
+            text-transform:uppercase;
+            margin-bottom:0.4rem;
+            letter-spacing:0.05em
+        }
+
+        .resource-value{
+            font-family:'Cinzel',serif;
+            font-size:1.8rem;
+            color:var(--light-gold);
+            font-weight:700;
+            transition:all 0.4s ease
+        }
+
+        .resource-value.increase{color:var(--accent-green);filter:brightness(1.3)}
+        .resource-value.decrease{color:var(--accent-red);filter:brightness(1.3)}
+
+        .resource-food .resource-value{color:var(--food-color)}
+        .resource-wood .resource-value{color:var(--wood-color)}
+        .resource-gold .resource-value{color:var(--gold-color)}
+        .resource-stone .resource-value{color:var(--stone-color)}
+
+        .reset-btn{
+            width:100%;
+            background:linear-gradient(135deg,#8b4513,#d2691e);
+            color:var(--text-light);
+            border:2px solid var(--primary-gold);
+            padding:1rem;
+            border-radius:8px;
+            font-family:'Cinzel',serif;
+            font-weight:700;
+            cursor:pointer;
+            margin-top:1.5rem;
+            text-transform:uppercase;
+            font-size:1rem;
+            transition:all var(--transition);
+            box-shadow:0 4px 10px rgba(0,0,0,0.4)
+        }
+
+        .reset-btn:hover{
+            background:linear-gradient(135deg,#a0522d,#cd853f);
+            transform:translateY(-2px);
+            box-shadow:0 6px 14px rgba(244,208,63,0.2)
+        }
+
+        .production-label,.total-villagers{
+            font-family:'Cinzel',serif;
+            font-size:0.9rem;
+            color:var(--primary-gold);
+            text-transform:uppercase
+        }
+
+        .total-value{
+            font-family:'Cinzel',serif;
+            font-size:2.4rem;
+            color:var(--accent-green);
+            font-weight:700;
+            transition:all 0.4s ease
+        }
+
+        .total-value.increase{color:var(--accent-green);filter:brightness(1.3)}
+        .total-value.decrease{color:var(--accent-red);filter:brightness(1.3)}
+
+        .summary-divider{
+            height:1px;
+            background:rgba(212,175,55,0.2);
+            margin:1rem 0
+        }
+
+        .upgrades-section h3{
+            font-family:'Cinzel',serif;
+            font-size:1.1rem;
+            color:var(--light-gold);
+            margin-bottom:0.9rem;
+            text-transform:uppercase
+        }
+
+        .upgrade-group-header{
+            font-family:'Cinzel',serif;
+            font-size:0.95rem;
+            color:var(--primary-gold);
+            margin:0.9rem 0 0.5rem;
+            text-transform:uppercase;
+            letter-spacing:0.05em
+        }
+
+        .upgrade-group{
+            display:flex;
+            flex-wrap:wrap;
+            gap:0.6rem 1.2rem
+        }
+
+        .upgrades-section label{
+            display:flex;
+            align-items:center;
+            font-size:0.9rem;
+            cursor:pointer
+        }
+
+        .upgrades-section input[type="checkbox"]{
+            margin-right:0.6rem;
+            cursor:pointer;
+            width:18px;
+            height:18px
+        }
+
+        .resource-breakdown{
+            font-size:0.75rem;
+            color:rgba(245,241,232,0.6);
+            margin-top:0.4rem;
+            font-style:italic
+        }
+
+        .hidden{display:none!important}
+
+        .civ-strategy-container{
+            max-width:1400px;
+            margin:0 auto
+        }
+
+        .civ-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+            gap:1.5rem;
+            margin-top:2rem
+        }
+
+        .civ-card{
+            background:var(--card-bg);
+            border:1px solid var(--border-gold-low);
+            border-radius:8px;
+            padding:1.5rem;
+            transition:all var(--transition);
+            box-shadow:0 4px 10px rgba(0,0,0,0.4);
+            cursor:pointer
+        }
+
+        .civ-card:hover{
+            border-color:var(--primary-gold);
+            transform:translateY(-5px);
+            box-shadow:0 12px 24px rgba(255,215,0,0.3)
+        }
+
+        .civ-name{
+            font-family:'Cinzel',serif;
+            font-size:1.3rem;
+            color:var(--light-gold);
+            margin-bottom:0.8rem;
+            text-align:center
+        }
+
+        .civ-description{
+            font-size:0.95rem;
+            color:var(--text-light);
+            line-height:1.6;
+            opacity:0.9;
+            text-align:center;
+            margin-bottom:1.2rem;
+            padding-bottom:1rem;
+            border-bottom:1px solid var(--border-gold-low)
+        }
+
+        .civ-details{
+            display:flex;
+            flex-direction:column;
+            gap:1rem
+        }
+
+        .civ-section{
+            text-align:left
+        }
+
+        .civ-section-title{
+            font-family:'Cinzel',serif;
+            font-size:0.95rem;
+            color:var(--primary-gold);
+            margin-bottom:0.5rem;
+            text-transform:uppercase;
+            letter-spacing:0.05em
+        }
+
+        .civ-list{
+            list-style:none;
+            padding-left:0;
+            margin:0
+        }
+
+        .civ-list li{
+            font-size:0.85rem;
+            line-height:1.5;
+            padding:0.3rem 0;
+            padding-left:1.2rem;
+            position:relative
+        }
+
+        .civ-list li::before{
+            position:absolute;
+            left:0;
+            font-weight:bold
+        }
+
+        .civ-advantages li{
+            color:rgba(81,207,102,0.9)
+        }
+
+        .civ-advantages li::before{
+            content:'✓';
+            color:var(--accent-green)
+        }
+
+        .civ-disadvantages li{
+            color:rgba(255,107,107,0.9)
+        }
+
+        .civ-disadvantages li::before{
+            content:'✗';
+            color:var(--accent-red)
+        }
+
+        footer{
+            text-align:center;
+            padding:2rem 1rem;
+            margin-top:4rem;
+            border-top:1px solid var(--border-gold-low);
+            font-family:'Cinzel',serif;
+            font-size:0.9rem;
+            color:var(--primary-gold);
+            opacity:0.8
+        }
+
+        .footer-links{
+            margin-bottom:0.5rem
+        }
+
+        .footer-link{
+            color:var(--primary-gold);
+            text-decoration:none;
+            cursor:pointer;
+            transition:color 0.3s ease;
+            margin:0 0.5rem
+        }
+
+        .footer-link:hover{
+            color:var(--light-gold);
+            text-decoration:underline
+        }
+
+        /* Privacy Policy Modal */
+        .modal{
+            display:none;
+            position:fixed;
+            z-index:2000;
+            left:0;
+            top:0;
+            width:100%;
+            height:100%;
+            background-color:rgba(0,0,0,0.8);
+            backdrop-filter:blur(5px);
+            overflow-y:auto
+        }
+
+        .modal.active{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:2rem
+        }
+
+        .modal-content{
+            background:var(--card-bg);
+            border:2px solid var(--primary-gold);
+            border-radius:12px;
+            padding:2.5rem;
+            max-width:800px;
+            width:100%;
+            max-height:90vh;
+            overflow-y:auto;
+            box-shadow:0 8px 32px rgba(0,0,0,0.6);
+            animation:modalSlideIn 0.3s ease;
+            position:relative
+        }
+
+        @keyframes modalSlideIn{
+            from{
+                opacity:0;
+                transform:translateY(-50px)
+            }
+            to{
+                opacity:1;
+                transform:translateY(0)
+            }
+        }
+
+        .modal-header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:2rem;
+            padding-bottom:1rem;
+            border-bottom:2px solid var(--primary-gold)
+        }
+
+        .modal-title{
+            font-family:'Cinzel',serif;
+            font-size:2rem;
+            color:var(--light-gold);
+            text-shadow:0 0 10px rgba(244,208,63,0.3)
+        }
+
+        .modal-close{
+            background:rgba(255,107,107,0.1);
+            border:1px solid rgba(255,107,107,0.3);
+            color:var(--accent-red);
+            font-size:1.5rem;
+            width:40px;
+            height:40px;
+            border-radius:50%;
+            cursor:pointer;
+            transition:all 0.2s;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:0
+        }
+
+        .modal-close:hover{
+            background:rgba(255,107,107,0.2);
+            border-color:var(--accent-red);
+            transform:rotate(90deg)
+        }
+
+        .modal-body{
+            font-size:0.95rem;
+            line-height:1.8;
+            color:var(--text-light)
+        }
+
+        .modal-body h3{
+            font-family:'Cinzel',serif;
+            font-size:1.3rem;
+            color:var(--light-gold);
+            margin:1.5rem 0 0.8rem;
+            text-transform:uppercase
+        }
+
+        .modal-body h3:first-child{
+            margin-top:0
+        }
+
+        .modal-body p{
+            margin-bottom:1rem;
+            opacity:0.9
+        }
+
+        .modal-body ul{
+            margin:0.5rem 0 1rem 1.5rem;
+            opacity:0.9
+        }
+
+        .modal-body li{
+            margin-bottom:0.5rem
+        }
+
+        .modal-body a{
+            color:var(--light-gold);
+            text-decoration:underline
+        }
+
+        .modal-body a:hover{
+            color:var(--primary-gold)
+        }
+
+        .modal-body strong{
+            color:var(--light-gold)
+        }
+
+        /* Cookie Consent Banner */
+        .cookie-banner{
+            position:fixed;
+            bottom:0;
+            left:0;
+            right:0;
+            background:linear-gradient(135deg,rgba(10,14,39,0.98),rgba(26,31,58,0.98));
+            border-top:2px solid var(--primary-gold);
+            padding:1.5rem;
+            z-index:1500;
+            box-shadow:0 -4px 20px rgba(0,0,0,0.6);
+            backdrop-filter:blur(10px);
+            display:none;
+            animation:slideUp 0.4s ease-out
+        }
+
+        .cookie-banner.show{
+            display:block
+        }
+
+        @keyframes slideUp{
+            from{
+                transform:translateY(100%);
+                opacity:0
+            }
+            to{
+                transform:translateY(0);
+                opacity:1
+            }
+        }
+
+        @keyframes slideInRight{
+            from{
+                transform:translateX(400px);
+                opacity:0
+            }
+            to{
+                transform:translateX(0);
+                opacity:1
+            }
+        }
+
+        @keyframes fadeOut{
+            from{
+                opacity:1
+            }
+            to{
+                opacity:0
+            }
+        }
+
+        .cookie-content{
+            max-width:1200px;
+            margin:0 auto;
+            display:flex;
+            align-items:center;
+            gap:2rem;
+            flex-wrap:wrap
+        }
+
+        .cookie-text{
+            flex:1;
+            min-width:300px
+        }
+
+        .cookie-text h3{
+            font-family:'Cinzel',serif;
+            font-size:1.2rem;
+            color:var(--light-gold);
+            margin-bottom:0.5rem
+        }
+
+        .cookie-text p{
+            font-size:0.9rem;
+            line-height:1.6;
+            color:var(--text-light);
+            opacity:0.9;
+            margin-bottom:0.5rem
+        }
+
+        .cookie-text a{
+            color:var(--light-gold);
+            text-decoration:underline;
+            cursor:pointer
+        }
+
+        .cookie-text a:hover{
+            color:var(--primary-gold)
+        }
+
+        .cookie-buttons{
+            display:flex;
+            gap:1rem;
+            flex-wrap:wrap
+        }
+
+        .cookie-btn{
+            font-family:'Cinzel',serif;
+            font-size:0.95rem;
+            font-weight:600;
+            padding:0.8rem 2rem;
+            border-radius:6px;
+            cursor:pointer;
+            transition:all 0.3s ease;
+            text-transform:uppercase;
+            letter-spacing:0.05em;
+            border:2px solid transparent;
+            white-space:nowrap
+        }
+
+        .cookie-btn-accept{
+            background:linear-gradient(135deg,var(--primary-gold),var(--light-gold));
+            color:var(--dark-bg);
+            border-color:var(--light-gold)
+        }
+
+        .cookie-btn-accept:hover{
+            background:linear-gradient(135deg,var(--light-gold),var(--primary-gold));
+            transform:translateY(-2px);
+            box-shadow:0 4px 12px rgba(244,208,63,0.4)
+        }
+
+        .cookie-btn-decline{
+            background:transparent;
+            color:var(--text-light);
+            border-color:var(--border-gold-med)
+        }
+
+        .cookie-btn-decline:hover{
+            background:rgba(255,107,107,0.1);
+            border-color:var(--accent-red);
+            color:var(--accent-red)
+        }
+
+        @media(max-width:968px){
+            .main-grid{grid-template-columns:1fr}
+            .summary-panel{position:relative;top:0;max-height:none}
+            .modal-content{
+                padding:1.5rem;
+                margin:1rem
+            }
+            .modal-title{
+                font-size:1.5rem
+            }
+            .cookie-content{
+                flex-direction:column;
+                gap:1rem
+            }
+            .cookie-buttons{
+                width:100%;
+                flex-direction:column
+            }
+            .cookie-btn{
+                width:100%;
+                text-align:center
+            }
+        }
+
+        @media(max-width:640px){
+            body{padding:var(--quote-height) 0.5rem 1rem}
+            .items-grid,.units-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem}
+            h1{font-size:2.4rem}
+            .tab-buttons{flex-direction:column;align-items:center}
+            .tab-button{width:80%;text-align:center}
+            .modal.active{
+                padding:0.5rem
+            }
+            .modal-content{
+                padding:1.5rem;
+                margin:0.5rem
+            }
+        }
+    </style>
+<meta name="msvalidate.01" content="ECF921BEFD5864651F39B16CA43E1423" />
+</head>
+<body>
+    <div class="quote-strip">
+        <div id="quoteText"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>QueueCalc</h1>
+            <p class="subtitle">Build order cost and unit production calculator By Condasoft</p>
+        </header>
+
+        <div class="tab-container">
+            <div class="tab-buttons">
+                <button class="tab-button active" data-target="building-tab">Buildings & Upgrades</button>
+                <button class="tab-button" data-target="unit-tab">Unit Production</button>
+                <button class="tab-button" data-target="civ-tab">Civ Strategy</button>
+            </div>
+
+            <div id="building-tab" class="tab-panel active">
+                <div class="main-grid">
+                    <div>
+                        <div class="sticky-header">
+                            <section class="production-queue-section">
+                                <h2>Buildings & Upgrades Queue</h2>
+                                <div class="queue-list" id="bld-queueList"><div class="queue-empty">Currently using the building & upgrade calculator</div></div>
+                            </section>
+                            <div class="search-box"><input type="text" id="bld-searchInput" placeholder="Search buildings, upgrades, techs..."></div>
+                        </div>
+                        <section class="items-grid" id="bld-itemsGrid"></section>
+                    </div>
+
+                    <aside class="summary-panel">
+                        <h2>Total Cost</h2>
+                        <div class="resource-box resource-food hidden" id="bld-foodBox"><div class="resource-label">Food</div><div class="resource-value" id="bld-totalFood">0</div></div>
+                        <div class="resource-box resource-wood hidden" id="bld-woodBox"><div class="resource-label">Wood</div><div class="resource-value" id="bld-totalWood">0</div></div>
+                        <div class="resource-box resource-gold hidden" id="bld-goldBox"><div class="resource-label">Gold</div><div class="resource-value" id="bld-totalGold">0</div></div>
+                        <div class="resource-box resource-stone hidden" id="bld-stoneBox"><div class="resource-label">Stone</div><div class="resource-value" id="bld-totalStone">0</div></div>
+                        <button class="reset-btn" id="bld-reset-btn">Reset All</button>
+                    </aside>
+                </div>
+            </div>
+
+            <div id="unit-tab" class="tab-panel">
+                <div class="main-grid">
+                    <div>
+                        <div class="sticky-header">
+                            <section class="production-queue-section">
+                                <h2>Production Queue</h2>
+                                <div class="queue-list" id="queueList"><div class="queue-empty">Currently using the unit production calculator</div></div>
+                            </section>
+                            <div class="search-box"><input type="text" id="searchInput" placeholder="Search units..."></div>
+                        </div>
+                        <section class="units-grid" id="unitsGrid"></section>
+                    </div>
+
+                    <aside class="summary-panel">
+                        <h2>Production Summary</h2>
+                        <div class="production-label">Villagers Needed</div>
+                        <div class="resource-box resource-food hidden" id="foodBox"><div class="resource-label">Food</div><div class="resource-value" id="villagersFood">0</div></div>
+                        <div class="resource-box resource-wood hidden" id="woodBox"><div class="resource-label">Wood</div><div class="resource-value" id="villagersWood">0</div><div class="resource-breakdown" id="woodBreakdown"></div></div>
+                        <div class="resource-box resource-gold hidden" id="goldBox"><div class="resource-label">Gold</div><div class="resource-value" id="villagersGold">0</div></div>
+                        <div class="summary-divider"></div>
+                        <div class="summary-section"><div class="total-villagers">Total Villagers</div><div class="total-value" id="totalVillagers">0</div></div>
+                        <button class="reset-btn" id="unit-reset-btn">Reset All</button>
+
+                        <div class="upgrades-section">
+                        <div class="summary-divider"></div>
+                            <h3>Economy Upgrades</h3>
+                            <div class="upgrade-group-header">Town Center</div>
+                            <div class="upgrade-group">
+                                <label><input type="checkbox" id="wheelbarrow"> Wheelbarrow</label>
+                                <label><input type="checkbox" id="handcart"> Hand Cart</label>
+                            </div>
+                            <div class="summary-divider"></div>
+
+                            <div class="upgrade-group-header">Mill</div>
+                            <div class="upgrade-group">
+                                <label><input type="checkbox" id="horsecollar"> Horse Collar</label>
+                                <label><input type="checkbox" id="heavyplow"> Heavy Plow</label>
+                                <label><input type="checkbox" id="croprotation"> Crop Rotation</label>
+                                <label><input type="checkbox" id="farmReseeding" checked> Farm Reseeding</label>
+                            </div>
+                            <div class="summary-divider"></div>
+
+                            <div class="upgrade-group-header">Lumber Camp</div>
+                            <div class="upgrade-group">
+                                <label><input type="checkbox" id="doublebit"> Double-Bit Axe</label>
+                                <label><input type="checkbox" id="bowsaw"> Bow Saw</label>
+                                <label><input type="checkbox" id="twomansaw"> Two-Man Saw</label>
+                            </div>
+                            <div class="summary-divider"></div>
+
+                            <div class="upgrade-group-header">Mining Camp</div>
+                            <div class="upgrade-group">
+                                <label><input type="checkbox" id="goldmining"> Gold Mining</label>
+                                <label><input type="checkbox" id="goldshaft"> Gold Shaft Mining</label>
+                            </div>
+                            <div class="summary-divider"></div>
+
+                            <div class="upgrade-group-header">Castle</div>
+                            <div class="upgrade-group">
+                                <label><input type="checkbox" id="conscription"> Conscription</label>
+                            </div>
+
+                            <details>
+                                <summary class="upgrade-group-header">Civ Bonuses (14)</summary>
+                                <div class="upgrade-group">
+                                    <label><input type="checkbox" id="gothsBonus"> Goths</label>
+                                    <label><input type="checkbox" id="magyarsBonus"> Magyars</label>
+                                    <label><input type="checkbox" id="berbersBonus"> Berbers</label>
+                                    <label><input type="checkbox" id="byzantinesBonus"> Byzantines</label>
+                                    <label><input type="checkbox" id="incasBonus"> Incas</label>
+                                    <label><input type="checkbox" id="portugueseBonus"> Portuguese</label>
+                                    <label><input type="checkbox" id="mayansBonus"> Mayans</label>
+                                    <label><input type="checkbox" id="malayBonus"> Malay</label>
+                                    <label><input type="checkbox" id="vikingsBonus"> Vikings</label>
+                                    <label><input type="checkbox" id="hunsBonus"> Huns</label>
+                                    <label><input type="checkbox" id="italiansBonus"> Italians</label>
+                                    <label><input type="checkbox" id="koreansBonus"> Koreans</label>
+                                    <label><input type="checkbox" id="slavsBonus"> Slavs</label>
+                                    <label><input type="checkbox" id="romansBonus"> Romans</label>
+                                </div>
+                            </details>
+
+                            <details>
+                                <summary class="upgrade-group-header">Unique Techs (2)</summary>
+                                <div class="upgrade-group">
+                                    <label><input type="checkbox" id="franksChivalry"> Franks Chivalry</label>
+                                    <label><input type="checkbox" id="gurjarasKshatriyas"> Gurjaras Kshatriyas</label>
+                                </div>
+                            </details>
+
+                            <details>
+                                <summary class="upgrade-group-header">Team Bonus (7)</summary>
+                                <div class="upgrade-group">
+                                    <label><input type="checkbox" id="gothsTeamBonus"> Goths</label>
+                                    <label><input type="checkbox" id="britonsTeamBonus"> Britons</label>
+                                    <label><input type="checkbox" id="gurjarasTeamBonus"> Gurjaras</label>
+                                    <label><input type="checkbox" id="magyarsTeamBonus"> Magyars</label>
+                                    <label><input type="checkbox" id="celtsTeamBonus"> Celts</label>
+                                    <label><input type="checkbox" id="hunsTeamBonus"> Huns</label>
+                                    <label><input type="checkbox" id="turksTeamBonus"> Turks</label>
+                                </div>
+                            </details>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+
+            <div id="civ-tab" class="tab-panel">
+                <div class="civ-strategy-container">
+                    <div class="search-box">
+                        <input type="text" id="civ-searchInput" placeholder="Search civilizations...">
+                    </div>
+                    <section class="civ-grid" id="civGrid"></section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Consent Banner -->
+    <div id="cookieBanner" class="cookie-banner">
+        <div class="cookie-content">
+            <div class="cookie-text">
+                <h3>🍪 We Value Your Privacy</h3>
+                <p>We use cookies and similar technologies to improve your experience and understand our user base. We will never share any of your data. By clicking "Accept", you consent to our use of cookies.</p>
+                <p><a id="cookiePrivacyLink">Learn more in our Privacy Policy</a></p>
+            </div>
+            <div class="cookie-buttons">
+                <button class="cookie-btn cookie-btn-accept" id="cookieAccept">Accept</button>
+                <button class="cookie-btn cookie-btn-decline" id="cookieDecline">Decline</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div id="privacyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Privacy Policy</h2>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Last Updated:</strong> February 14, 2026</p>
+
+                <h3>1. Introduction</h3>
+                <p>Welcome to QueueCalc ("we," "our," or "us"). We are committed to protecting your privacy and being transparent about how we collect and use information when you visit our website at <a href="https://queuecalc.com">queuecalc.com</a> (the "Site").</p>
+
+                <h3>2. Information We Collect</h3>
+                <p>We collect the following types of information:</p>
+                <ul>
+                    <li><strong>Location Data:</strong> We use a WordPress plugin to collect approximate location information (city, region, country) based on your IP address. This helps us understand where our users are located and improve our service.</li>
+                    <li><strong>Usage Data:</strong> We may collect information about how you interact with our Site, including pages visited, time spent on pages, and other analytics data.</li>
+                    <li><strong>Technical Data:</strong> This includes your IP address, browser type, device type, operating system, and other technical information automatically collected when you visit our Site.</li>
+                </ul>
+
+                <h3>3. How We Use Your Information</h3>
+                <p>We use the collected information for the following purposes:</p>
+                <ul>
+                    <li>To understand our user demographics and improve the Site</li>
+                    <li>To analyze usage patterns and optimize user experience</li>
+                    <li>To maintain and improve the functionality of our calculator tools</li>
+                    <li>To comply with legal obligations and protect our rights</li>
+                </ul>
+
+                <h3>4. Cookies and Tracking Technologies</h3>
+                <p>Our Site may use cookies and similar tracking technologies to enhance your experience. These may include:</p>
+                <ul>
+                    <li>Essential cookies required for the Site to function properly</li>
+                    <li>Analytics cookies to understand how visitors use the Site</li>
+                    <li>Location tracking through our WordPress plugin</li>
+                </ul>
+                <p>You can control cookies through your browser settings, though disabling certain cookies may affect Site functionality.</p>
+
+                <h3>5. Data Sharing and Disclosure</h3>
+                <p>We do not sell, trade, or rent your personal information to third parties. We may share information only in the following circumstances:</p>
+                <ul>
+                    <li>With service providers who help us operate the Site (such as hosting providers)</li>
+                    <li>When required by law or to protect our legal rights</li>
+                    <li>In connection with a business transfer, merger, or acquisition</li>
+                </ul>
+
+                <h3>6. Data Storage and Security</h3>
+                <p>We implement reasonable security measures to protect your information from unauthorized access, alteration, or destruction. However, no method of transmission over the Internet is 100% secure, and we cannot guarantee absolute security.</p>
+
+                <h3>7. Your Rights</h3>
+                <p>Depending on your location, you may have certain rights regarding your personal information, including:</p>
+                <ul>
+                    <li>The right to access the information we hold about you</li>
+                    <li>The right to request correction or deletion of your information</li>
+                    <li>The right to object to or restrict certain processing activities</li>
+                    <li>The right to data portability</li>
+                </ul>
+                <p>To exercise any of these rights, please contact us using the information provided below.</p>
+
+                <h3>8. Third-Party Links</h3>
+                <p>Our Site may contain links to third-party websites. We are not responsible for the privacy practices of these external sites and encourage you to review their privacy policies.</p>
+
+                <h3>9. Children's Privacy</h3>
+                <p>Our Site is not intended for children under the age of 13. We do not knowingly collect personal information from children. If you believe we have inadvertently collected such information, please contact us immediately.</p>
+
+                <h3>10. Changes to This Privacy Policy</h3>
+                <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated "Last Updated" date. We encourage you to review this policy periodically.</p>
+
+                <h3>11. Contact Us</h3>
+                <p>If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us at:</p>
+                <p>
+                    <strong>Condasoft</strong><br>
+                    Email: <a href="mailto:contact@queuecalc.com">contact@queuecalc.com</a><br>
+                    Website: <a href="https://queuecalc.com">queuecalc.com</a>
+                </p>
+
+                <h3>12. GDPR Compliance (For EU Users)</h3>
+                <p>If you are located in the European Economic Area (EEA), we process your personal data in accordance with the General Data Protection Regulation (GDPR). Our legal basis for processing includes:</p>
+                <ul>
+                    <li>Consent: Where you have given explicit consent</li>
+                    <li>Legitimate interests: To operate and improve our Site</li>
+                    <li>Legal obligations: To comply with applicable laws</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-links">
+            <span class="footer-link" id="openPrivacy">Privacy Policy</span>
+            <span style="color:var(--primary-gold);margin:0 0.3rem;">•</span>
+            <span class="footer-link" id="cookieSettings">Cookie Preferences</span>
+        </div>
+        Copyright © Condasoft 2026
+    </footer>
+
+<script>
+(function(){const q=["Unit definitions last updated 6th feb 2026","Site currently undergoing rapid development","Gathering rates last benchmarked 6th feb 2026"];let ql=[...q];const sh=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}};sh(ql);const qt=document.getElementById('quoteText');let currentTyping=null;const typeText=(text,callback)=>{let index=0;qt.innerHTML='';const type=()=>{if(index<text.length){qt.innerHTML=text.substring(0,index+1);index++;currentTyping=setTimeout(type,30)}else{currentTyping=null;if(callback)callback()}};type()};const cq=()=>{if(currentTyping){clearTimeout(currentTyping);currentTyping=null}const c=ql.shift();ql.push(c);qt.style.opacity='0';setTimeout(()=>{qt.style.opacity='1';typeText(c,()=>{setTimeout(()=>{qt.style.opacity='0'},27000)})},500)};window.addEventListener('load',()=>{cq();setInterval(cq,30000)})})();
+
+// Privacy Modal functionality
+(function(){
+    const modal = document.getElementById('privacyModal');
+    const openBtn = document.getElementById('openPrivacy');
+    const closeBtn = document.getElementById('closeModal');
+    
+    openBtn.addEventListener('click', function() {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+    
+    closeBtn.addEventListener('click', function() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    });
+    
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+})();
+
+// Cookie Consent Banner functionality
+(function(){
+    const banner = document.getElementById('cookieBanner');
+    const acceptBtn = document.getElementById('cookieAccept');
+    const declineBtn = document.getElementById('cookieDecline');
+    const cookiePrivacyLink = document.getElementById('cookiePrivacyLink');
+    const privacyModal = document.getElementById('privacyModal');
+    const COOKIE_CONSENT_KEY = 'queuecalc_cookie_consent';
+    
+    // Check if user has already made a choice
+    function checkConsent() {
+        const consent = localStorage.getItem(COOKIE_CONSENT_KEY);
+        if (!consent) {
+            // Show banner after a short delay for better UX
+            setTimeout(function() {
+                banner.classList.add('show');
+            }, 1000);
+        } else {
+            // User has already decided, apply their choice
+            if (consent === 'accepted') {
+                enableTracking();
+            }
+        }
+    }
+    
+    // Enable tracking (placeholder - you can add actual tracking code here)
+    function enableTracking() {
+        // Add your WordPress location tracking initialization here
+        // Examples of what you might do:
+        
+        // 1. If using a specific WordPress plugin script:
+        // var script = document.createElement('script');
+        // script.src = 'path-to-your-tracking-plugin.js';
+        // document.head.appendChild(script);
+        
+        // 2. If using Google Analytics or similar:
+        // gtag('consent', 'update', {
+        //     'analytics_storage': 'granted'
+        // });
+        
+        // 3. Enable any WordPress plugin-specific tracking:
+        // if (window.YourTrackingPlugin) {
+        //     window.YourTrackingPlugin.enable();
+        // }
+        
+        console.log('Cookie consent accepted - tracking enabled');
+    }
+    
+    // Disable tracking
+    function disableTracking() {
+        // Add code to disable tracking
+        // Examples:
+        
+        // 1. Remove tracking cookies:
+        // document.cookie.split(";").forEach(function(c) {
+        //     document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        // });
+        
+        // 2. Disable Google Analytics:
+        // gtag('consent', 'update', {
+        //     'analytics_storage': 'denied'
+        // });
+        
+        // 3. Disable WordPress plugin tracking:
+        // if (window.YourTrackingPlugin) {
+        //     window.YourTrackingPlugin.disable();
+        // }
+        
+        // 4. Set do-not-track flag:
+        // localStorage.setItem('do_not_track', 'true');
+        
+        console.log('Cookie consent declined - tracking disabled');
+    }
+    
+    // Handle accept
+    acceptBtn.addEventListener('click', function() {
+        localStorage.setItem(COOKIE_CONSENT_KEY, 'accepted');
+        enableTracking();
+        banner.classList.remove('show');
+    });
+    
+    // Handle decline
+    declineBtn.addEventListener('click', function() {
+        localStorage.setItem(COOKIE_CONSENT_KEY, 'declined');
+        disableTracking();
+        banner.classList.remove('show');
+        
+        // Show brief notification
+        showDeclineNotification();
+    });
+    
+    // Show notification when user declines
+    function showDeclineNotification() {
+        const notification = document.createElement('div');
+        notification.style.cssText = 'position:fixed;bottom:20px;right:20px;background:linear-gradient(135deg,rgba(10,14,39,0.95),rgba(26,31,58,0.95));border:2px solid var(--primary-gold);padding:1rem 1.5rem;border-radius:8px;color:var(--text-light);font-family:Lora,serif;font-size:0.9rem;z-index:1600;max-width:350px;box-shadow:0 4px 12px rgba(0,0,0,0.6);animation:slideInRight 0.3s ease-out;';
+        notification.innerHTML = '<strong style="color:var(--light-gold);font-family:Cinzel,serif;">Cookies Declined</strong><br>You can still use all calculator features. Location tracking is disabled. You can change this anytime in Cookie Preferences.';
+        document.body.appendChild(notification);
+        
+        setTimeout(function() {
+            notification.style.animation = 'fadeOut 0.3s ease-out';
+            setTimeout(function() {
+                document.body.removeChild(notification);
+            }, 300);
+        }, 5000);
+    }
+    
+    // Open privacy policy from cookie banner
+    cookiePrivacyLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        privacyModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+    
+    // Cookie Settings link in footer
+    const cookieSettingsBtn = document.getElementById('cookieSettings');
+    cookieSettingsBtn.addEventListener('click', function() {
+        banner.classList.add('show');
+    });
+    
+    // Initialize on page load
+    checkConsent();
+})();
+
+const debounce=(f,w)=>{let t;return function(...a){clearTimeout(t);t=setTimeout(()=>f.apply(this,a),w)}};
+const sanitizeId=n=>n.replace(/\s+/g,'-').replace(/[^a-zA-Z0-9-]/g,'');
+const toggleVisibility=(e,s)=>{s?e.classList.remove('hidden'):e.classList.add('hidden')};
+window.initBuildings=function(){const itemsData={'Buildings & Upgrades':{'Ages':{'Feudal Age':{food:500,wood:0,gold:0,stone:0},'Castle Age':{food:800,wood:0,gold:200,stone:0},'Imperial Age':{food:1000,wood:0,gold:800,stone:0}},'Town Center':{'Town Center':{food:0,wood:275,gold:0,stone:100},'Villager':{food:50,wood:0,gold:0,stone:0},'Loom':{food:0,wood:0,gold:50,stone:0},'Town Watch':{food:75,wood:0,gold:0,stone:0},'Town Patrol':{food:300,wood:0,gold:100,stone:0},'Wheelbarrow':{food:175,wood:50,gold:0,stone:0},'Hand Cart':{food:300,wood:200,gold:0,stone:0}},'Mill / Folwark':{'Mill':{food:0,wood:100,gold:0,stone:0},'Folwark':{food:0,wood:100,gold:0,stone:0},'Horse Collar':{food:75,wood:75,gold:0,stone:0},'Heavy Plow':{food:125,wood:125,gold:0,stone:0},'Crop Rotation':{food:250,wood:250,gold:0,stone:0},'Domestication':{food:50,wood:100,gold:0,stone:0},'Pastoralism':{food:100,wood:150,gold:0,stone:0},'Transhumance':{food:175,wood:325,gold:0,stone:0}},'Farms':{'Farm':{food:0,wood:60,gold:0,stone:0},'Pasture':{food:0,wood:100,gold:0,stone:0}},'Lumber Camp / Mule Cart':{'Lumber Camp':{food:0,wood:100,gold:0,stone:0},'Mule Cart':{food:0,wood:100,gold:0,stone:0},'Double-Bit Axe':{food:100,wood:50,gold:0,stone:0},'Bow Saw':{food:150,wood:100,gold:0,stone:0},'Two-Man Saw':{food:300,wood:200,gold:0,stone:0}},'Mining Camp':{'Mining Camp':{food:0,wood:100,gold:0,stone:0},'Gold Mining':{food:100,wood:75,gold:0,stone:0},'Gold Shaft Mining':{food:175,wood:75,gold:0,stone:0},'Stone Mining':{food:100,wood:75,gold:0,stone:0},'Stone Shaft Mining':{food:175,wood:75,gold:0,stone:0}},'Market':{'Market':{food:0,wood:175,gold:0,stone:0},'Trade Cart':{food:0,wood:100,gold:50,stone:0},'Trade Cog':{food:0,wood:100,gold:50,stone:0},'Caravan':{food:200,wood:0,gold:200,stone:0},'Coinage':{food:200,wood:0,gold:100,stone:0},'Banking':{food:300,wood:0,gold:200,stone:0},'Guilds':{food:300,wood:0,gold:200,stone:0}},'Dock / Harbor':{'Dock':{food:0,wood:150,gold:0,stone:0},'Harbor':{food:0,wood:150,gold:0,stone:0},'Fishing Ship':{food:0,wood:75,gold:0,stone:0},'Fish Trap':{food:0,wood:100,gold:0,stone:0},'Gillnets':{food:150,wood:200,gold:0,stone:0},'War Galley':{food:230,wood:100,gold:0,stone:0},'Galleon':{food:400,wood:315,gold:0,stone:0},'Fast Fire Ship':{food:320,wood:400,gold:0,stone:0},'Heavy Demo Ship':{food:350,wood:300,gold:0,stone:0},'Elite Cannon Galleon':{food:1000,wood:800,gold:0,stone:0},'Careening':{food:250,wood:0,gold:150,stone:0},'Dry Dock':{food:600,wood:0,gold:400,stone:0},'Shipwright':{food:1000,wood:0,gold:300,stone:0}},'Blacksmith':{'Blacksmith':{food:0,wood:150,gold:0,stone:0},'Forging':{food:150,wood:0,gold:0,stone:0},'Iron Casting':{food:220,wood:0,gold:120,stone:0},'Blast Furnace':{food:275,wood:0,gold:225,stone:0},'Scale Mail Armor':{food:100,wood:0,gold:0,stone:0},'Chain Mail Armor':{food:200,wood:0,gold:100,stone:0},'Plate Mail Armor':{food:300,wood:0,gold:150,stone:0},'Fletching':{food:100,wood:0,gold:50,stone:0},'Bodkin Arrow':{food:200,wood:0,gold:100,stone:0},'Bracer':{food:300,wood:0,gold:200,stone:0},'Padded Archer Armor':{food:100,wood:0,gold:0,stone:0},'Leather Archer Armor':{food:150,wood:0,gold:150,stone:0},'Ring Archer Armor':{food:250,wood:0,gold:250,stone:0},'Scale Barding Armor':{food:150,wood:0,gold:0,stone:0},'Chain Barding Armor':{food:250,wood:0,gold:150,stone:0},'Plate Barding Armor':{food:350,wood:0,gold:200,stone:0}},'University':{'University':{food:0,wood:200,gold:0,stone:0},'Treadmill Crane':{food:0,wood:200,gold:0,stone:50},'Masonry':{food:150,wood:175,gold:0,stone:0},'Architecture':{food:300,wood:200,gold:0,stone:0},'Ballistics':{food:0,wood:300,gold:175,stone:0},'Heated Shot':{food:350,wood:0,gold:100,stone:0},'Murder Holes':{food:200,wood:0,gold:0,stone:100},'Arrowslits':{food:250,wood:250,gold:0,stone:0},'Chemistry':{food:300,wood:0,gold:200,stone:0},'Siege Engineers':{food:500,wood:600,gold:0,stone:0},'Bombard Tower':{food:800,wood:400,gold:0,stone:0}},'Barracks':{'Barracks':{food:0,wood:175,gold:0,stone:0},'Arson':{food:75,wood:0,gold:25,stone:0},'Gambesons':{food:100,wood:0,gold:100,stone:0},'Squires':{food:100,wood:0,gold:0,stone:0},'Man-at-Arms':{food:100,wood:0,gold:40,stone:0},'Long Swordsman':{food:200,wood:0,gold:65,stone:0},'Two-Handed Swordsman':{food:300,wood:0,gold:100,stone:0},'Champion':{food:750,wood:0,gold:350,stone:0},'Pikeman':{food:215,wood:90,gold:0,stone:0},'Halberdier':{food:500,wood:600,gold:0,stone:0},'Eagle Warrior':{food:200,wood:0,gold:50,stone:0},'Elite Eagle Warrior':{food:800,wood:0,gold:600,stone:0}},'Archery Range':{'Archery Range':{food:0,wood:175,gold:0,stone:0},'Thumb Ring':{food:300,wood:250,gold:0,stone:0},'Parthian Tactics':{food:200,wood:0,gold:250,stone:0},'Crossbowman':{food:125,wood:75,gold:0,stone:0},'Arbalester':{food:250,wood:250,gold:0,stone:0},'Elite Skirmisher':{food:230,wood:130,gold:0,stone:0}},'Stable':{'Stable':{food:0,wood:175,gold:0,stone:0},'Bloodlines':{food:150,wood:0,gold:100,stone:0},'Husbandry':{food:150,wood:0,gold:0,stone:0},'Light Cavalry':{food:150,wood:0,gold:50,stone:0},'Hussar':{food:500,wood:0,gold:600,stone:0},'Cavalier':{food:300,wood:0,gold:300,stone:0},'Paladin':{food:1300,wood:0,gold:750,stone:0},'Heavy Camel Rider':{food:325,wood:0,gold:360,stone:0},'Imperial Camel Rider':{food:675,wood:0,gold:450,stone:0},'Battle Elephant':{food:1000,wood:0,gold:600,stone:0}},'Siege Workshop':{'Siege Workshop':{food:0,wood:200,gold:0,stone:0},'Capped Ram':{food:300,wood:200,gold:0,stone:0},'Siege Ram':{food:1000,wood:500,gold:0,stone:0},'Onager':{food:800,wood:400,gold:0,stone:0},'Siege Onager':{food:1450,wood:1000,gold:0,stone:0},'Heavy Scorpion':{food:1000,wood:1100,gold:0,stone:0}},'Monastery':{'Monastery':{food:0,wood:175,gold:0,stone:0},'Redemption':{food:0,wood:0,gold:475,stone:0},'Atonement':{food:0,wood:0,gold:325,stone:0},'Herbal Medicine':{food:0,wood:0,gold:200,stone:0},'Heresy':{food:0,wood:0,gold:1000,stone:0},'Sanctity':{food:0,wood:0,gold:175,stone:0},'Fervor':{food:0,wood:0,gold:140,stone:0},'Devotion':{food:100,wood:0,gold:200,stone:0},'Faith':{food:550,wood:0,gold:750,stone:0},'Illumination':{food:0,wood:0,gold:120,stone:0},'Block Printing':{food:0,wood:0,gold:200,stone:0},'Theocracy':{food:0,wood:0,gold:200,stone:0}},'Castle':{'Castle':{food:0,wood:0,gold:0,stone:650},'Krepost':{food:0,wood:0,gold:0,stone:350},'Donjon':{food:0,wood:0,gold:0,stone:350},'Hoardings':{food:400,wood:400,gold:0,stone:0},'Conscription':{food:150,wood:0,gold:150,stone:0},'Sappers':{food:400,wood:200,gold:0,stone:0},'Spies':{food:0,wood:0,gold:200,stone:0},'Treason':{food:0,wood:0,gold:400,stone:0}},'Defensive Structures':{'Palisade Wall':{food:0,wood:2,gold:0,stone:0},'Palisade Gate':{food:0,wood:20,gold:0,stone:0},'Outpost':{food:0,wood:25,gold:0,stone:5},'Stone Wall':{food:0,wood:0,gold:0,stone:5},'Fortified Wall':{food:0,wood:0,gold:0,stone:5},'Gate':{food:0,wood:0,gold:0,stone:30},'Fortified Gate':{food:0,wood:0,gold:0,stone:30},'Watch Tower':{food:0,wood:50,gold:0,stone:125},'Guard Tower':{food:0,wood:50,gold:0,stone:125},'Keep':{food:0,wood:50,gold:0,stone:125},'Bombard Tower':{food:0,wood:50,gold:0,stone:125}},'Miscellaneous':{'House':{food:0,wood:30,gold:0,stone:0},'Wonder':{food:0,wood:1000,gold:1000,stone:1000},'Feitoria':{food:250,wood:250,gold:250,stone:250},'Caravanserai':{food:0,wood:100,gold:100,stone:100},'Fortified Church':{food:0,wood:175,gold:0,stone:0}}}};const counts={};const grid=document.getElementById('bld-itemsGrid');const queueList=document.getElementById('bld-queueList');const searchInput=document.getElementById('bld-searchInput');const resourceElements={food:{box:document.getElementById('bld-foodBox'),value:document.getElementById('bld-totalFood')},wood:{box:document.getElementById('bld-woodBox'),value:document.getElementById('bld-totalWood')},gold:{box:document.getElementById('bld-goldBox'),value:document.getElementById('bld-totalGold')},stone:{box:document.getElementById('bld-stoneBox'),value:document.getElementById('bld-totalStone')}};Object.values(itemsData).forEach(cat=>Object.values(cat).forEach(sub=>Object.keys(sub).forEach(item=>counts[item]=0)));const createCostHTML=costs=>{let html='';if(costs.food>0)html+=`<div class="cost-row"><span class="cost-label">Food:</span><span class="cost-value cost-food">${costs.food}</span></div>`;if(costs.wood>0)html+=`<div class="cost-row"><span class="cost-label">Wood:</span><span class="cost-value cost-wood">${costs.wood}</span></div>`;if(costs.gold>0)html+=`<div class="cost-row"><span class="cost-label">Gold:</span><span class="cost-value cost-gold">${costs.gold}</span></div>`;if(costs.stone>0)html+=`<div class="cost-row"><span class="cost-label">Stone:</span><span class="cost-value cost-stone">${costs.stone}</span></div>`;return html||'<div style="opacity:0.6">No cost</div>'};const updateCount=(itemName,delta)=>{counts[itemName]=Math.max(0,counts[itemName]+delta);updateUI()};const createItemCard=(itemName,costs,category,subcategory)=>{const card=document.createElement('div');card.className='item-card';card.dataset.category=category;card.dataset.subcategory=subcategory;card.dataset.name=itemName;const itemId=sanitizeId(itemName);const villagerImg='';card.innerHTML=`<div class="item-info">${villagerImg}<h3>${itemName}</h3></div><div class="item-costs">${createCostHTML(costs)}</div><div class="item-counter"><button class="btn-minus" data-item="${itemName}">-</button><span class="item-count" id="bld-count-${itemId}">0</span><button class="btn-plus" data-item="${itemName}">+</button></div>`;return card};const initializeUI=()=>{const fragment=document.createDocumentFragment();Object.entries(itemsData).forEach(([category,subcategories])=>{const categoryHeader=document.createElement('div');categoryHeader.className='category-header';categoryHeader.textContent=category;categoryHeader.dataset.category=category;fragment.appendChild(categoryHeader);Object.entries(subcategories).forEach(([subcategory,items])=>{const subcategoryHeader=document.createElement('div');subcategoryHeader.className='subcategory-header';subcategoryHeader.dataset.subcategory=subcategory;subcategoryHeader.innerHTML=`<span class="toggle-btn">+</span>${subcategory}`;fragment.appendChild(subcategoryHeader);const content=document.createElement('div');content.className='subcategory-content';content.style.display='none';Object.entries(items).forEach(([itemName,costs])=>{content.appendChild(createItemCard(itemName,costs,category,subcategory))});fragment.appendChild(content)})});grid.appendChild(fragment)};const calculateTotals=()=>{const totals={food:0,wood:0,gold:0,stone:0};Object.values(itemsData).forEach(cat=>Object.values(cat).forEach(sub=>Object.entries(sub).forEach(([item,costs])=>{const count=counts[item]||0;totals.food+=costs.food*count;totals.wood+=costs.wood*count;totals.gold+=costs.gold*count;totals.stone+=costs.stone*count})));return totals};const updateQueue=()=>{const queuedItems=Object.entries(counts).filter(([_,count])=>count>0).sort((a,b)=>b[1]-a[1]);if(queuedItems.length===0){queueList.innerHTML='<div class="queue-empty">Currently using the building & upgrade calculator</div>';return}const fragment=document.createDocumentFragment();queuedItems.forEach(([item,count])=>{const queueItem=document.createElement('div');queueItem.className='queue-item';queueItem.innerHTML=`<span class="queue-item-name">${item}</span><span class="queue-item-count">x${count}</span><button class="queue-item-remove" data-item="${item}">X</button>`;fragment.appendChild(queueItem)});queueList.innerHTML='';queueList.appendChild(fragment)};const filterItems=searchTerm=>{const term=(searchTerm||'').toLowerCase().trim();const visibleCats=new Set();const visibleSubs=new Set();const cards=grid.querySelectorAll('.item-card');cards.forEach(card=>{const name=card.dataset.name.toLowerCase();const count=counts[card.dataset.name]||0;const matches=name.includes(term);if(matches||count>0||!term){card.style.display='';card.style.opacity=(count>0&&!matches&&term)?'0.7':'1';card.style.order=(count>0&&!matches&&term)?'-1':'0';visibleCats.add(card.dataset.category);visibleSubs.add(card.dataset.subcategory)}else{card.style.display='none'}});grid.querySelectorAll('.subcategory-content').forEach(content=>{const header=content.previousElementSibling;if(header&&header.classList.contains('subcategory-header')){const sub=header.dataset.subcategory;if(term){const shouldOpen=visibleSubs.has(sub);content.style.display=shouldOpen?'grid':'none';header.querySelector('.toggle-btn').textContent=shouldOpen?'-':'+'}}});grid.querySelectorAll('.category-header').forEach(h=>{h.style.display=visibleCats.has(h.dataset.category)?'':'none'});grid.querySelectorAll('.subcategory-header').forEach(h=>{h.style.display=visibleSubs.has(h.dataset.subcategory)||!term?'':'none'})};const updateUI=()=>{Object.keys(counts).forEach(itemName=>{const el=document.getElementById(`bld-count-${sanitizeId(itemName)}`);if(el)el.textContent=counts[itemName]});const totals=calculateTotals();Object.entries(resourceElements).forEach(([resource,{box,value}])=>{const amount=totals[resource];const prevAmount=parseInt(value.textContent)||0;toggleVisibility(box,amount>0);if(amount>0){if(amount!==prevAmount){const direction=amount>prevAmount?1:-1;let current=prevAmount;const step=()=>{current+=direction;value.textContent=current;if(direction>0){value.classList.remove('decrease');value.classList.add('increase')}else{value.classList.remove('increase');value.classList.add('decrease')}if(current!==amount){setTimeout(step,10)}else{setTimeout(()=>{value.classList.remove('increase','decrease')},400)}};step()}else{value.textContent=amount}}});updateQueue();filterItems(searchInput.value)};const resetCalculator=()=>{Object.keys(counts).forEach(k=>counts[k]=0);searchInput.value='';Object.entries(resourceElements).forEach(([resource,{box,value}])=>{value.textContent='0';toggleVisibility(box,false)});updateUI()};grid.addEventListener('click',e=>{const btn=e.target.closest('button');if(btn&&btn.dataset.item){if(btn.classList.contains('btn-minus')){updateCount(btn.dataset.item,-1)}else if(btn.classList.contains('btn-plus')){updateCount(btn.dataset.item,1)}}const header=e.target.closest('.subcategory-header');if(header){const content=header.nextElementSibling;if(content&&content.classList.contains('subcategory-content')){const isOpen=content.style.display==='grid';content.style.display=isOpen?'none':'grid';header.querySelector('.toggle-btn').textContent=isOpen?'+':'-'}}});queueList.addEventListener('click',e=>{const btn=e.target.closest('.queue-item-remove');if(btn){updateCount(btn.dataset.item,-1)}});searchInput.addEventListener('input',debounce(e=>filterItems(e.target.value),150));document.getElementById('bld-reset-btn').addEventListener('click',resetCalculator);initializeUI();updateUI()};
+window.initUnits=function(){const REAL_SECONDS_PER_IN_GAME_MINUTE=37;const REAL_PER_IN_GAME_SECOND=REAL_SECONDS_PER_IN_GAME_MINUTE/60;const BASE_GATHER_RATES={food:0.548,wood:0.587,gold:0.696};const REALISTIC_FARM_RATE_PER_VILL=0.950;const unitStats={'Villager':{food:50,wood:0,gold:0,time:25},'Militia':{food:50,wood:0,gold:20,time:21},'Man-At-Arms':{food:50,wood:0,gold:20,time:21},'Long Swordsman':{food:50,wood:0,gold:20,time:21},'Two-Handed Swordsman':{food:50,wood:0,gold:20,time:21},'Champion':{food:50,wood:0,gold:20,time:21},'Spearman':{food:35,wood:25,gold:0,time:22},'Pikeman':{food:35,wood:25,gold:0,time:22},'Halberdier':{food:35,wood:25,gold:0,time:22},'Archer':{food:0,wood:25,gold:45,time:35},'Crossbowman':{food:0,wood:25,gold:45,time:35},'Arbalest':{food:0,wood:25,gold:45,time:35},'Skirmisher':{food:25,wood:35,gold:0,time:22},'Elite Skirmisher':{food:25,wood:35,gold:0,time:22},'Imperial Skirmisher':{food:25,wood:35,gold:0,time:22},'Hand Cannoneer':{food:45,wood:0,gold:50,time:34},'Scout Cavalry':{food:80,wood:0,gold:0,time:30},'Light Cavalry':{food:80,wood:0,gold:0,time:30},'Hussar':{food:80,wood:0,gold:0,time:30},'Knight':{food:60,wood:0,gold:75,time:30},'Cavalier':{food:60,wood:0,gold:75,time:30},'Paladin':{food:60,wood:0,gold:75,time:30},'Camel Scout':{food:55,wood:0,gold:0,time:25},'Camel':{food:55,wood:0,gold:60,time:22},'Heavy Camel':{food:55,wood:0,gold:60,time:22},'Imperial Camel Rider':{food:55,wood:0,gold:60,time:22},'Cavalry Archer':{food:0,wood:40,gold:60,time:37},'Heavy Cavalry Archer':{food:0,wood:40,gold:60,time:37},'Eagle Scout':{food:20,wood:0,gold:50,time:35},'Eagle Warrior':{food:20,wood:0,gold:50,time:35},'Elite Eagle Warrior':{food:20,wood:0,gold:50,time:35},'Monk':{food:0,wood:0,gold:100,time:51},'Battering Ram':{food:0,wood:160,gold:75,time:36},'Capped Ram':{food:0,wood:160,gold:75,time:36},'Siege Ram':{food:0,wood:160,gold:75,time:36},'Mangonel':{food:0,wood:160,gold:135,time:46},'Onager':{food:0,wood:160,gold:135,time:46},'Siege Onager':{food:0,wood:160,gold:135,time:46},'Rocket Cart':{food:0,wood:130,gold:155,time:40},'Heavy Rocket Cart':{food:0,wood:130,gold:155,time:40},'Scorpion':{food:0,wood:75,gold:75,time:30},'Heavy Scorpion':{food:0,wood:75,gold:75,time:30},'Trebuchet':{food:0,wood:200,gold:200,time:50},'Bombard Cannon':{food:0,wood:225,gold:225,time:56},'Galley':{food:0,wood:90,gold:30,time:60},'War Galley':{food:0,wood:90,gold:30,time:60},'Galleon':{food:0,wood:90,gold:30,time:60},'Fire Galley':{food:0,wood:75,gold:45,time:60},'Fire Ship':{food:0,wood:75,gold:45,time:60},'Fast Fire Ship':{food:0,wood:75,gold:45,time:60},'Demolition Ship':{food:0,wood:70,gold:50,time:60},'Heavy Demolition Ship':{food:0,wood:70,gold:50,time:60},'Cannon Galleon':{food:0,wood:200,gold:150,time:46},'Elite Cannon Galleon':{food:0,wood:200,gold:150,time:46},'Arambai':{food:0,wood:75,gold:60,time:18},'Elite Arambai':{food:0,wood:75,gold:60,time:18},'Ballista Elephant':{food:100,wood:0,gold:80,time:50},'Elite Ballista Elephant':{food:100,wood:0,gold:80,time:50},'Battle Elephant':{food:100,wood:0,gold:70,time:24},'Elite Battle Elephant':{food:100,wood:0,gold:70,time:24},'Berserk':{food:65,wood:0,gold:20,time:14},'Elite Berserk':{food:65,wood:0,gold:20,time:12},'Boyar':{food:60,wood:0,gold:70,time:15},'Elite Boyar':{food:60,wood:0,gold:70,time:15},'Camel Archer':{food:0,wood:50,gold:60,time:25},'Elite Camel Archer':{food:0,wood:50,gold:60,time:25},'Cataphract':{food:70,wood:0,gold:75,time:20},'Elite Cataphract':{food:70,wood:0,gold:75,time:20},'Centurion':{food:75,wood:0,gold:80,time:24},'Elite Centurion':{food:75,wood:0,gold:80,time:24},'Chakram Thrower':{food:65,wood:0,gold:30,time:15},'Elite Chakram Thrower':{food:65,wood:0,gold:30,time:15},'Chu Ko Nu':{food:0,wood:40,gold:35,time:16},'Elite Chu Ko Nu':{food:0,wood:40,gold:35,time:13},'Composite Bowman':{food:0,wood:35,gold:45,time:12},'Elite Composite Bowman':{food:0,wood:35,gold:45,time:10},'Condottiero':{food:50,wood:0,gold:35,time:18},'Conquistador':{food:70,wood:0,gold:60,time:24},'Elite Conquistador':{food:70,wood:0,gold:60,time:24},'Coustillier':{food:55,wood:0,gold:55,time:15},'Elite Coustillier':{food:55,wood:0,gold:55,time:14},'Konnik':{food:60,wood:0,gold:70,time:16},'Elite Konnik':{food:60,wood:0,gold:70,time:16},'Dragon Ship':{food:0,wood:75,gold:45,time:36},'Elephant Archer':{food:60,wood:60,gold:80,time:32},'Elite Elephant Archer':{food:60,wood:60,gold:80,time:32},'Fire Archer':{food:0,wood:45,gold:45,time:17},'Elite Fire Archer':{food:0,wood:45,gold:45,time:17},'Flemish Militia':{food:30,wood:0,gold:25,time:14},'Flaming Camel':{food:75,wood:0,gold:30,time:25},'Gbeto':{food:50,wood:0,gold:40,time:17},'Elite Gbeto':{food:50,wood:0,gold:40,time:17},'Genitour':{food:40,wood:35,gold:0,time:25},'Elite Genitour':{food:40,wood:35,gold:0,time:25},'Genoese Crossbowman':{food:0,wood:45,gold:40,time:14},'Elite Genoese Crossbowman':{food:0,wood:45,gold:40,time:14},'Ghulam':{food:30,wood:0,gold:45,time:12},'Elite Ghulam':{food:30,wood:0,gold:45,time:12},'Grenadier':{food:35,wood:0,gold:65,time:21},'Houfnice':{food:0,wood:225,gold:225,time:56},'Huskarl':{food:60,wood:0,gold:20,time:21},'Hussite Wagon':{food:0,wood:200,gold:160,time:50},'Iron Pagoda':{food:80,wood:0,gold:55,time:14},'Elite Iron Pagoda':{food:80,wood:0,gold:55,time:14},'Jaguar Warrior':{food:60,wood:0,gold:30,time:10.4},'Elite Jaguar Warrior':{food:60,wood:0,gold:30,time:10.4},'Janissary':{food:60,wood:0,gold:55,time:16.8},'Elite Janissary':{food:60,wood:0,gold:55,time:16.8},'Jian Swordsman':{food:45,wood:0,gold:50,time:35},'Kamayuk':{food:60,wood:0,gold:30,time:10},'Elite Kamayuk':{food:60,wood:0,gold:30,time:10},'Karambit Warrior':{food:25,wood:0,gold:15,time:6},'Elite Karambit Warrior':{food:25,wood:0,gold:15,time:6},'Keshik':{food:60,wood:0,gold:40,time:17},'Elite Keshik':{food:60,wood:0,gold:40,time:15},'Kipchak':{food:0,wood:60,gold:35,time:20},'Legionary':{food:50,wood:0,gold:20,time:21},'Leitis':{food:70,wood:0,gold:50,time:20},'Elite Leitis':{food:70,wood:0,gold:50,time:20},'Liao Dao':{food:40,wood:0,gold:40,time:12},'Elite Liao Dao':{food:40,wood:0,gold:40,time:12},'Longbowman':{food:0,wood:35,gold:40,time:18},'Elite Longbowman':{food:0,wood:35,gold:40,time:18},'Magyar Huszar':{food:35,wood:0,gold:45,time:12},'Elite Magyar Huszar':{food:35,wood:0,gold:45,time:12},'Mameluke':{food:55,wood:0,gold:85,time:23},'Elite Mameluke':{food:55,wood:0,gold:85,time:23},'Mangudai':{food:0,wood:55,gold:65,time:26},'Elite Mangudai':{food:0,wood:55,gold:65,time:26},'Ratha':{food:60,wood:0,gold:60,time:20},'Elite Ratha':{food:60,wood:0,gold:60,time:18},'Missionary':{food:0,wood:0,gold:100,time:51},'Monaspa':{food:60,wood:0,gold:45,time:14},'Elite Monaspa':{food:60,wood:0,gold:45,time:14},'Mounted Trebuchet':{food:0,wood:200,gold:200,time:50},'Obuch':{food:55,wood:0,gold:20,time:12},'Elite Obuch':{food:55,wood:0,gold:20,time:12},'Organ Gun':{food:0,wood:80,gold:70,time:25},'Elite Organ Gun':{food:0,wood:80,gold:70,time:21},'Plumed Archer':{food:0,wood:55,gold:55,time:16},'Elite Plumed Archer':{food:0,wood:55,gold:55,time:16},'Rattan Archer':{food:45,wood:50,gold:45,time:16},'Elite Rattan Archer':{food:45,wood:50,gold:45,time:16},'Samurai':{food:45,wood:0,gold:30,time:9},'Elite Samurai':{food:45,wood:0,gold:30,time:9},'Savar':{food:60,wood:0,gold:75,time:30},'Serjeant':{food:55,wood:0,gold:25,time:12},'Elite Serjeant':{food:55,wood:0,gold:25,time:12},'Shotel Warrior':{food:50,wood:0,gold:30,time:8},'Elite Shotel Warrior':{food:50,wood:0,gold:30,time:4},'Shrivamsha Rider':{food:70,wood:0,gold:30,time:20},'Elite Shrivamsha Rider':{food:70,wood:0,gold:30,time:20},'Slinger':{food:40,wood:0,gold:40,time:25},'Tarkan':{food:60,wood:0,gold:60,time:14},'Elite Tarkan':{food:60,wood:0,gold:60,time:14},'Teutonic Knight':{food:85,wood:0,gold:30,time:12},'Elite Teutonic Knight':{food:85,wood:0,gold:30,time:12},'Thirisadai':{food:0,wood:180,gold:60,time:40},'Throwing Axeman':{food:55,wood:0,gold:25,time:13},'Elite Throwing Axeman':{food:55,wood:0,gold:25,time:13},'Tiger Cavalry':{food:60,wood:0,gold:80,time:15},'Elite Tiger Cavalry':{food:60,wood:0,gold:80,time:15},'Turtle Ship':{food:0,wood:190,gold:180,time:50},'Elite Turtle Ship':{food:0,wood:190,gold:180,time:50},'Urumi Swordsman':{food:65,wood:0,gold:20,time:9},'Elite Urumi Swordsman':{food:65,wood:0,gold:20,time:9},'War Chariot':{food:65,wood:0,gold:90,time:28},'War Elephant':{food:170,wood:145,gold:85,time:25},'Elite War Elephant':{food:170,wood:145,gold:85,time:25},'War Wagon':{food:0,wood:200,gold:60,time:21},'Elite War Wagon':{food:0,wood:200,gold:60,time:21},'Warrior Priest':{food:30,wood:0,gold:50,time:30},'White Feather Guard':{food:60,wood:0,gold:15,time:11},'Elite White Feather Guard':{food:60,wood:0,gold:15,time:11},'Winged Hussar':{food:80,wood:0,gold:0,time:30},'Woad Raider':{food:70,wood:0,gold:25,time:10},'Elite Woad Raider':{food:70,wood:0,gold:25,time:10},'Xianbei Raider':{food:0,wood:60,gold:25,time:26},'Hei Guang':{food:65,wood:60,gold:65,time:28},'Heavy Hei Guang':{food:65,wood:60,gold:65,time:28},'Traction Trebuchet':{food:65,wood:175,gold:210,time:70},'Steppe Lancer':{food:70,wood:0,gold:40,time:24},'Elite Steppe Lancer':{food:70,wood:0,gold:40,time:20},'Caraval':{food:0,wood:90,gold:43,time:25},'Elite Caraval':{food:0,wood:90,gold:43,time:25},'Longboat':{food:0,wood:100,gold:50,time:25},'Elite Longboat':{food:0,wood:100,gold:50,time:25}};const unitCategories={infantry:new Set(['Militia','Man-At-Arms','Long Swordsman','Two-Handed Swordsman','Champion','Spearman','Pikeman','Halberdier','Eagle Scout','Eagle Warrior','Elite Eagle Warrior','Condottiero','Huskarl','Berserk','Jaguar Warrior','Kamayuk','Karambit Warrior','Obuch','Samurai','Serjeant','Shotel Warrior','Teutonic Knight','Urumi Swordsman','Woad Raider','Flemish Militia','Legionary','Jian Swordsman','Liao Dao','White Feather Guard','Ghulam']),barracks:new Set(['Militia','Man-At-Arms','Long Swordsman','Two-Handed Swordsman','Champion','Spearman','Pikeman','Halberdier','Eagle Scout','Eagle Warrior','Elite Eagle Warrior','Condottiero','Huskarl']),stables:new Set(['Scout Cavalry','Light Cavalry','Hussar','Knight','Cavalier','Paladin','Camel Scout','Camel','Heavy Camel','Imperial Camel Rider','Battle Elephant','Elite Battle Elephant','Steppe Lancer','Elite Steppe Lancer','Winged Hussar']),archeryRange:new Set(['Archer','Crossbowman','Arbalest','Skirmisher','Elite Skirmisher','Imperial Skirmisher','Cavalry Archer','Heavy Cavalry Archer','Hand Cannoneer','Slinger','Genitour','Elite Genitour']),camelElephant:new Set(['Camel Scout','Camel','Heavy Camel','Imperial Camel Rider','Camel Archer','Elite Camel Archer','Battle Elephant','Elite Battle Elephant','Ballista Elephant','Elite Ballista Elephant','Elephant Archer','Elite Elephant Archer','War Elephant','Elite War Elephant']),mountedArcher:new Set(['Cavalry Archer','Heavy Cavalry Archer','Camel Archer','Elite Camel Archer','Elephant Archer','Elite Elephant Archer','Mangudai','Elite Mangudai','War Wagon','Elite War Wagon','Kipchak']),scoutCavalry:new Set(['Scout Cavalry','Light Cavalry','Hussar','Winged Hussar']),tcDock:new Set(['Villager','Galley','War Galley','Galleon','Fire Galley','Fire Ship','Fast Fire Ship','Demolition Ship','Heavy Demolition Ship','Cannon Galleon','Elite Cannon Galleon','Dragon Ship','Turtle Ship','Elite Turtle Ship','Longboat','Elite Longboat','Caraval','Elite Caraval','Thirisadai']),siegeWorkshop:new Set(['Battering Ram','Capped Ram','Siege Ram','Mangonel','Onager','Siege Onager','Scorpion','Heavy Scorpion','Trebuchet','Bombard Cannon','Rocket Cart','Heavy Rocket Cart','Houfnice','Hussite Wagon','Organ Gun','Elite Organ Gun'])};const isInCategory=(unitName,category)=>unitCategories[category]?.has(unitName)||false;const isMilitary=unitName=>unitName!=='Villager';const units={};Object.keys(unitStats).forEach(unit=>units[unit]=0);let currentGatherRates={...BASE_GATHER_RATES,farmFood:175};const bonusState={};const grid=document.getElementById('unitsGrid');const queueList=document.getElementById('queueList');const searchInput=document.getElementById('searchInput');const resourceElements={food:{box:document.getElementById('foodBox'),value:document.getElementById('villagersFood')},wood:{box:document.getElementById('woodBox'),value:document.getElementById('villagersWood'),breakdown:document.getElementById('woodBreakdown')},gold:{box:document.getElementById('goldBox'),value:document.getElementById('villagersGold')}};const totalVillagersEl=document.getElementById('totalVillagers');const toggleStates={};const getGenericSubcategory=unitName=>{const name=unitName.toLowerCase();if(name.includes('villager'))return'Villager';if(name.includes('militia')||name.includes('man-at-arms')||name.includes('swordsman')||name.includes('champion')||name.includes('eagle'))return'Infantry';if(name.includes('spearman')||name.includes('pikeman')||name.includes('halberdier'))return'Anti-Cav Infantry';if(name.includes('archer')||name.includes('crossbowman')||name.includes('arbalest')||name.includes('slinger')||name.includes('hand cannoneer')||name.includes('skirmisher')||name.includes('cavalry archer'))return'Ranged';if(name.includes('scout cavalry')||name.includes('light cavalry')||name.includes('hussar')||name.includes('knight')||name.includes('cavalier')||name.includes('paladin')||name.includes('camel'))return'Cavalry';if(name==='monk')return'Monks';if(name.includes('ram'))return'Rams';if(name.includes('mangonel')||name.includes('onager'))return'Mangonels';if(name.includes('rocket cart'))return'Rocket Carts';if(name.includes('scorpion'))return'Scorpions';if(name.includes('trebuchet')||name.includes('bombard cannon'))return'Heavy Siege';if(name.includes('galley')||name.includes('galleon')||name.includes('fire')||name.includes('demolition')||name.includes('cannon galleon'))return'Ships';return'Other Generic'};const getUniqueSubcategory=unitName=>{const name=unitName.toLowerCase();if(['berserk','huskarl','jaguar warrior','kamayuk','karambit warrior','obuch','samurai','serjeant','shotel warrior','teutonic knight','urumi swordsman','woad raider','flemish militia','condottiero','legionary','jian swordsman','liao dao','white feather guard','ghulam'].some(k=>name.includes(k))){return'Unique Infantry'}if(['boyar','cataphract','centurion','coustillier','keshik','konnik','leitis','magyar huszar','monaspa','savar','shrivamsha rider','tarkan','tiger cavalry','steppe lancer','winged hussar'].some(k=>name.includes(k))){return'Unique Cavalry'}if(['arambai','chu ko nu','composite bowman','genitour','genoese crossbowman','kipchak','longbowman','plumed archer','rattan archer','janissary','chakram thrower','gbeto','throwing axeman','conquistador','ratha','xianbei raider','grenadier','fire archer','war chariot','mangudai'].some(k=>name.includes(k))){return'Unique Ranged'}if(['camel archer','mameluke'].some(k=>name.includes(k))){return'Unique Camels'}if(['ballista elephant','battle elephant','elephant archer','war elephant'].some(k=>name.includes(k))){return'Unique Elephants'}if(['organ gun','hussite wagon','houfnice','traction trebuchet','mounted trebuchet','thirisadai','war wagon','hei guang','iron pagoda','rocket cart','flaming camel'].some(k=>name.includes(k))){return'Unique Siege'}if(['turtle ship','longboat','caraval','dragon ship'].some(k=>name.includes(k))){return'Unique Ships'}if(['missionary','warrior priest'].some(k=>name.includes(k))){return'Unique Monks'}return'Unique Other'};const classifyUnit=unitName=>{const name=unitName.toLowerCase();const genericNames=['villager','militia','man-at-arms','long swordsman','two-handed swordsman','champion','spearman','pikeman','halberdier','archer','crossbowman','arbalest','skirmisher','elite skirmisher','imperial skirmisher','hand cannoneer','slinger','scout cavalry','light cavalry','hussar','knight','cavalier','paladin','camel scout','camel','heavy camel','imperial camel rider','cavalry archer','heavy cavalry archer','eagle scout','eagle warrior','elite eagle warrior','monk','battering ram','capped ram','siege ram','mangonel','onager','siege onager','scorpion','heavy scorpion','trebuchet','bombard cannon','galley','war galley','galleon','fire galley','fire ship','fast fire ship','demolition ship','heavy demolition ship','cannon galleon','elite cannon galleon','rocket cart','heavy rocket cart'];return genericNames.includes(name)?'Generic Units':'Unique'};const createCostHTML=stats=>{let html='';if(stats.food>0)html+=`<div class="cost-row"><span class="cost-label">Food:</span><span class="cost-value">${stats.food}</span></div>`;if(stats.wood>0)html+=`<div class="cost-row"><span class="cost-label">Wood:</span><span class="cost-value cost-wood">${stats.wood}</span></div>`;if(stats.gold>0)html+=`<div class="cost-row"><span class="cost-label">Gold:</span><span class="cost-value cost-gold">${stats.gold}</span></div>`;html+=`<div class="cost-row"><span class="cost-label">Time:</span><span class="cost-value">${stats.time}s</span></div>`;return html};const createUnitCard=(unitType,stats,category,subcategory)=>{const card=document.createElement('div');card.className='unit-card';card.dataset.category=category;card.dataset.subcategory=subcategory;card.dataset.name=unitType;const unitId=sanitizeId(unitType);const villagerImg='';card.innerHTML=`<div class="unit-info">${villagerImg}<h3>${unitType}</h3></div><div class="unit-costs">${createCostHTML(stats)}</div><div class="unit-counter"><button class="btn-minus" data-unit="${unitType}">-</button><span class="unit-count" id="count-${unitId}">0</span><button class="btn-plus" data-unit="${unitType}">+</button></div>`;return card};const initializeUI=()=>{const fragment=document.createDocumentFragment();const categoryOrder=['Generic Units','Unique'];const genericSubOrder=['Villager','Infantry','Anti-Cav Infantry','Ranged','Cavalry','Monks','Rams','Mangonels','Rocket Carts','Scorpions','Heavy Siege','Ships'];const upgradeOrder={'Villager':['Villager'],'Infantry':['Militia','Man-At-Arms','Long Swordsman','Two-Handed Swordsman','Champion','Eagle Scout','Eagle Warrior','Elite Eagle Warrior'],'Anti-Cav Infantry':['Spearman','Pikeman','Halberdier'],'Ranged':['Archer','Crossbowman','Arbalest','Skirmisher','Elite Skirmisher','Imperial Skirmisher','Hand Cannoneer','Cavalry Archer','Heavy Cavalry Archer','Slinger'],'Cavalry':['Scout Cavalry','Light Cavalry','Hussar','Knight','Cavalier','Paladin','Camel Scout','Camel','Heavy Camel','Imperial Camel Rider'],'Monks':['Monk'],'Rams':['Battering Ram','Capped Ram','Siege Ram'],'Mangonels':['Mangonel','Onager','Siege Onager'],'Rocket Carts':['Rocket Cart','Heavy Rocket Cart'],'Scorpions':['Scorpion','Heavy Scorpion'],'Heavy Siege':['Trebuchet','Bombard Cannon'],'Ships':['Galley','War Galley','Galleon','Fire Galley','Fire Ship','Fast Fire Ship','Demolition Ship','Heavy Demolition Ship','Cannon Galleon','Elite Cannon Galleon']};const uniqueSubOrder=['Unique Infantry','Unique Cavalry','Unique Ranged','Unique Camels','Unique Elephants','Unique Siege','Unique Ships','Unique Monks','Unique Other'];categoryOrder.forEach(category=>{const headerDiv=document.createElement('div');headerDiv.className='category-header';headerDiv.dataset.category=category;headerDiv.textContent=category.toUpperCase();fragment.appendChild(headerDiv);const subOrder=category==='Generic Units'?genericSubOrder:uniqueSubOrder;subOrder.forEach(subcategory=>{const filteredUnits=Object.entries(unitStats).filter(([unitType])=>classifyUnit(unitType)===category&&(category==='Generic Units'?getGenericSubcategory(unitType)===subcategory:getUniqueSubcategory(unitType)===subcategory));if(filteredUnits.length>0){const subHeader=document.createElement('div');subHeader.className='subcategory-header';subHeader.dataset.subcategory=subcategory;subHeader.innerHTML=`<span class="toggle-btn">+</span>${subcategory}`;fragment.appendChild(subHeader);toggleStates[subcategory]=false;const content=document.createElement('div');content.className='subcategory-content';content.style.display='none';let orderedUnits=[];if(category==='Generic Units'&&upgradeOrder[subcategory]){upgradeOrder[subcategory].forEach(unitName=>{const unit=filteredUnits.find(([name])=>name===unitName);if(unit)orderedUnits.push(unit)})}else{orderedUnits=filteredUnits.sort((a,b)=>{const nameA=a[0].replace('Elite ','');const nameB=b[0].replace('Elite ','');if(nameA<nameB)return-1;if(nameA>nameB)return 1;return a[0].startsWith('Elite ')?1:-1})}orderedUnits.forEach(([unitType,stats])=>{content.appendChild(createUnitCard(unitType,stats,category,subcategory))});fragment.appendChild(content)}})});grid.appendChild(fragment)};const updateGatherRates=()=>{const checkboxStates={wheelbarrow:document.getElementById('wheelbarrow').checked,handcart:document.getElementById('handcart').checked,doublebit:document.getElementById('doublebit').checked,bowsaw:document.getElementById('bowsaw').checked,twomansaw:document.getElementById('twomansaw').checked,goldmining:document.getElementById('goldmining').checked,goldshaft:document.getElementById('goldshaft').checked,horsecollar:document.getElementById('horsecollar').checked,heavyplow:document.getElementById('heavyplow').checked,croprotation:document.getElementById('croprotation').checked};if(checkboxStates.handcart){document.getElementById('wheelbarrow').checked=true;checkboxStates.wheelbarrow=true}if(checkboxStates.twomansaw){document.getElementById('bowsaw').checked=true;document.getElementById('doublebit').checked=true;checkboxStates.bowsaw=true;checkboxStates.doublebit=true}else if(checkboxStates.bowsaw){document.getElementById('doublebit').checked=true;checkboxStates.doublebit=true}if(checkboxStates.goldshaft){document.getElementById('goldmining').checked=true;checkboxStates.goldmining=true}if(checkboxStates.croprotation){document.getElementById('heavyplow').checked=true;document.getElementById('horsecollar').checked=true;checkboxStates.heavyplow=true;checkboxStates.horsecollar=true}else if(checkboxStates.heavyplow){document.getElementById('horsecollar').checked=true;checkboxStates.horsecollar=true}Object.keys(bonusState).forEach(k=>delete bonusState[k]);['conscription','gothsBonus','magyarsBonus','berbersBonus','byzantinesBonus','incasBonus','portugueseBonus','mayansBonus','malayBonus','vikingsBonus','hunsBonus','italiansBonus','koreansBonus','slavsBonus','romansBonus','franksChivalry','gurjarasKshatriyas','gothsTeamBonus','britonsTeamBonus','gurjarasTeamBonus','magyarsTeamBonus','celtsTeamBonus','hunsTeamBonus','turksTeamBonus','farmReseeding'].forEach(bonus=>{const el=document.getElementById(bonus);if(el)bonusState[bonus]=el.checked});let foodRate=BASE_GATHER_RATES.food;let woodRate=BASE_GATHER_RATES.wood;let goldRate=BASE_GATHER_RATES.gold;if(checkboxStates.wheelbarrow){foodRate*=1.03;woodRate*=1.05;goldRate*=1.05}if(checkboxStates.handcart){foodRate*=1.04;woodRate*=1.04;goldRate*=1.035}let woodWorkMultiplier=1.0;if(checkboxStates.doublebit)woodWorkMultiplier*=1.20;if(checkboxStates.bowsaw)woodWorkMultiplier*=1.20;if(checkboxStates.twomansaw)woodWorkMultiplier*=1.10;woodRate*=(1+(woodWorkMultiplier-1)*0.85);let goldWorkMultiplier=1.0;if(checkboxStates.goldmining)goldWorkMultiplier*=1.15;if(checkboxStates.goldshaft)goldWorkMultiplier*=1.15;goldRate*=(1+(goldWorkMultiplier-1)*0.85);if(checkboxStates.horsecollar)foodRate*=1.04;if(checkboxStates.heavyplow)foodRate*=1.015;if(checkboxStates.croprotation)foodRate*=1.025;let farmFood=175;if(checkboxStates.horsecollar)farmFood+=75;if(checkboxStates.heavyplow)farmFood+=125;if(checkboxStates.croprotation)farmFood+=175;currentGatherRates={food:foodRate,wood:woodRate,gold:goldRate,farmFood}};const applyCostModifiers=(unitType,stats)=>{let foodCost=stats.food||0;let woodCost=stats.wood||0;let goldCost=stats.gold||0;if(bonusState.gothsBonus&&isInCategory(unitType,'infantry')){foodCost*=(1-0.15-0.05*(bonusState.conscription?1:0))}if(bonusState.magyarsBonus&&isInCategory(unitType,'scoutCavalry')){foodCost*=0.85;woodCost*=0.85;goldCost*=0.85}if(bonusState.berbersBonus&&isInCategory(unitType,'stables')){foodCost*=0.80;woodCost*=0.80;goldCost*=0.80}if(bonusState.byzantinesBonus&&(unitType.includes('Skirmisher')||unitType.includes('Spearman')||unitType.includes('Pikeman')||unitType.includes('Halberdier')||unitType.includes('Camel'))){foodCost*=0.75;woodCost*=0.75;goldCost*=0.75}if(bonusState.incasBonus&&isMilitary(unitType)){foodCost*=0.75}if(bonusState.portugueseBonus){goldCost*=0.80}if(bonusState.mayansBonus&&isInCategory(unitType,'archeryRange')&&!unitType.includes('Skirmisher')){foodCost*=0.70;woodCost*=0.70;goldCost*=0.70}if(bonusState.malayBonus&&unitType.includes('Battle Elephant')){foodCost*=0.65;goldCost*=0.65}if(bonusState.vikingsBonus&&isInCategory(unitType,'tcDock')&&unitType.includes('Ship')){foodCost*=0.80;woodCost*=0.80;goldCost*=0.80}if(bonusState.hunsBonus&&isInCategory(unitType,'mountedArcher')){foodCost*=0.80;woodCost*=0.80;goldCost*=0.80}if(bonusState.italiansBonus&&(unitType.includes('Hand Cannoneer')||unitType.includes('Bombard'))){foodCost*=0.80;woodCost*=0.80;goldCost*=0.80}if(bonusState.koreansBonus&&(isInCategory(unitType,'archeryRange')||isInCategory(unitType,'infantry'))){woodCost*=0.50}if(bonusState.slavsBonus&&isInCategory(unitType,'siegeWorkshop')){foodCost*=0.85;woodCost*=0.85;goldCost*=0.85}if(bonusState.romansBonus&&(unitType==='Scorpion'||unitType==='Heavy Scorpion')){goldCost*=0.50}if(bonusState.gurjarasKshatriyas&&isMilitary(unitType)){foodCost*=0.75}return{foodCost,woodCost,goldCost}};const applyTimeModifiers=(unitType,baseTime)=>{let modifiedTime=baseTime;if(bonusState.franksChivalry&&isInCategory(unitType,'stables')){modifiedTime/=1.40}if(bonusState.gothsTeamBonus&&isInCategory(unitType,'barracks')){modifiedTime/=1.20}if(bonusState.britonsTeamBonus&&isInCategory(unitType,'archeryRange')){modifiedTime/=1.10}if(bonusState.gurjarasTeamBonus&&isInCategory(unitType,'camelElephant')){modifiedTime/=1.25}if(bonusState.magyarsTeamBonus&&isInCategory(unitType,'mountedArcher')){modifiedTime/=1.25}if(bonusState.celtsTeamBonus&&isInCategory(unitType,'siegeWorkshop')){modifiedTime/=1.20}if(bonusState.hunsTeamBonus&&isInCategory(unitType,'stables')){modifiedTime/=1.20}if(bonusState.turksTeamBonus&&(unitType.includes('Hand Cannoneer')||unitType.includes('Bombard')||unitType.includes('Houfnice'))){modifiedTime/=1.25}if(bonusState.conscription){modifiedTime*=0.67}return modifiedTime};const calculateTotals=()=>{let totalFoodPerSec=0;let totalWoodPerSec=0;let totalGoldPerSec=0;Object.entries(units).forEach(([unitType,count])=>{if(count>0&&unitStats[unitType]){const stats=unitStats[unitType];const{foodCost,woodCost,goldCost}=applyCostModifiers(unitType,stats);const modifiedTime=applyTimeModifiers(unitType,stats.time);const realCycleTime=modifiedTime*REAL_PER_IN_GAME_SECOND;totalFoodPerSec+=(foodCost*count)/realCycleTime;totalWoodPerSec+=(woodCost*count)/realCycleTime;totalGoldPerSec+=(goldCost*count)/realCycleTime}});let reseedWoodPerSec=0;if(bonusState.farmReseeding&&totalFoodPerSec>0&&currentGatherRates.farmFood>0){const effectiveFarmVillagers=totalFoodPerSec/REALISTIC_FARM_RATE_PER_VILL;const farmsDepletedPerSec=effectiveFarmVillagers/currentGatherRates.farmFood;reseedWoodPerSec=farmsDepletedPerSec*60}totalWoodPerSec+=reseedWoodPerSec;const villagersFood=totalFoodPerSec>0?Math.ceil(totalFoodPerSec/currentGatherRates.food):0;const villagersWood=totalWoodPerSec>0?Math.ceil(totalWoodPerSec/currentGatherRates.wood):0;const villagersGold=totalGoldPerSec>0?Math.ceil(totalGoldPerSec/currentGatherRates.gold):0;const villagersWoodDirect=(totalWoodPerSec-reseedWoodPerSec)>0?Math.ceil((totalWoodPerSec-reseedWoodPerSec)/currentGatherRates.wood):0;const villagersWoodReseed=reseedWoodPerSec>0?Math.ceil(reseedWoodPerSec/currentGatherRates.wood):0;return{villagersFood,villagersWood,villagersGold,villagersWoodDirect,villagersWoodReseed}};const updateQueue=()=>{const queuedUnits=Object.entries(units).filter(([_,count])=>count>0).sort((a,b)=>b[1]-a[1]);if(queuedUnits.length===0){queueList.innerHTML='<div class="queue-empty">Currently using the unit production calculator</div>';return}const fragment=document.createDocumentFragment();queuedUnits.forEach(([unitType,count])=>{const queueItem=document.createElement('div');queueItem.className='queue-item';queueItem.innerHTML=`<span class="queue-item-name">${unitType}</span><span class="queue-item-count">x${count}</span><button class="queue-item-remove" data-unit="${unitType}">X</button>`;fragment.appendChild(queueItem)});queueList.innerHTML='';queueList.appendChild(fragment)};const filterUnits=searchTerm=>{const term=(searchTerm||'').toLowerCase().trim();const visibleCategories=new Set();const visibleSubcategories=new Set();const subHasDirectMatch=new Set();const cards=grid.querySelectorAll('.unit-card');cards.forEach(card=>{const unitName=card.dataset.name.toLowerCase();const unitCount=units[card.dataset.name]||0;const matches=unitName.includes(term);const show=matches||unitCount>0||!term;card.style.display=show?'':'none';card.style.opacity=(unitCount>0&&!matches&&term)?'0.7':'1';card.style.order=(unitCount>0&&!matches&&term)?'-1':'0';if(show){visibleCategories.add(card.dataset.category);visibleSubcategories.add(card.dataset.subcategory)}if(matches)subHasDirectMatch.add(card.dataset.subcategory)});grid.querySelectorAll('.category-header').forEach(header=>{header.style.display=visibleCategories.has(header.dataset.category)?'':'none'});grid.querySelectorAll('.subcategory-header').forEach(header=>{header.style.display=visibleSubcategories.has(header.dataset.subcategory)?'':'none'});grid.querySelectorAll('.subcategory-content').forEach(content=>{const header=content.previousElementSibling;if(header&&header.classList.contains('subcategory-header')){const sub=header.dataset.subcategory;let isOpen=toggleStates[sub];if(term&&subHasDirectMatch.has(sub))isOpen=true;content.style.display=isOpen?'grid':'none';header.querySelector('.toggle-btn').textContent=isOpen?'-':'+'}})};const updateUI=()=>{Object.keys(units).forEach(unitType=>{const el=document.getElementById(`count-${sanitizeId(unitType)}`);if(el)el.textContent=units[unitType]});const totals=calculateTotals();const animateValue=(element,newValue)=>{const prevValue=parseInt(element.textContent)||0;if(newValue!==prevValue&&newValue>0){const direction=newValue>prevValue?1:-1;let current=prevValue;const step=()=>{current+=direction;element.textContent=current;if(direction>0){element.classList.remove('decrease');element.classList.add('increase')}else{element.classList.remove('increase');element.classList.add('decrease')}if(current!==newValue){setTimeout(step,30)}else{setTimeout(()=>{element.classList.remove('increase','decrease')},400)}};step()}else if(newValue>0){element.textContent=newValue}};toggleVisibility(resourceElements.food.box,totals.villagersFood>0);if(totals.villagersFood>0){animateValue(resourceElements.food.value,totals.villagersFood)}toggleVisibility(resourceElements.wood.box,totals.villagersWood>0);if(totals.villagersWood>0){animateValue(resourceElements.wood.value,totals.villagersWood);resourceElements.wood.breakdown.textContent=totals.villagersWoodReseed>0?`(${totals.villagersWoodDirect} direct + ${totals.villagersWoodReseed} reseeding)`:'';}toggleVisibility(resourceElements.gold.box,totals.villagersGold>0);if(totals.villagersGold>0){animateValue(resourceElements.gold.value,totals.villagersGold)}const totalVillagers=totals.villagersFood+totals.villagersWood+totals.villagersGold;animateValue(totalVillagersEl,totalVillagers);updateQueue();filterUnits(searchInput.value)};const updateCount=(unitType,delta)=>{units[unitType]=Math.max(0,units[unitType]+delta);updateUI()};const resetCalculator=()=>{Object.keys(units).forEach(k=>units[k]=0);searchInput.value='';document.querySelectorAll('.upgrades-section input[type="checkbox"]').forEach(cb=>{cb.checked=cb.id==='farmReseeding'});resourceElements.food.value.textContent='0';resourceElements.wood.value.textContent='0';resourceElements.gold.value.textContent='0';totalVillagersEl.textContent='0';toggleVisibility(resourceElements.food.box,false);toggleVisibility(resourceElements.wood.box,false);toggleVisibility(resourceElements.gold.box,false);updateGatherRates();updateUI()};grid.addEventListener('click',e=>{const btn=e.target.closest('button');if(btn&&btn.dataset.unit){if(btn.classList.contains('btn-minus')){updateCount(btn.dataset.unit,-1)}else if(btn.classList.contains('btn-plus')){updateCount(btn.dataset.unit,1)}}const header=e.target.closest('.subcategory-header');if(header){const content=header.nextElementSibling;if(content&&content.classList.contains('subcategory-content')){const sub=header.dataset.subcategory;toggleStates[sub]=!toggleStates[sub];content.style.display=toggleStates[sub]?'grid':'none';header.querySelector('.toggle-btn').textContent=toggleStates[sub]?'-':'+'}}});queueList.addEventListener('click',e=>{const btn=e.target.closest('.queue-item-remove');if(btn){updateCount(btn.dataset.unit,-1)}});searchInput.addEventListener('input',debounce(e=>filterUnits(e.target.value),150));document.querySelectorAll('.upgrades-section input[type="checkbox"]').forEach(check=>{check.addEventListener('change',()=>{updateGatherRates();updateUI()})});document.getElementById('unit-reset-btn').addEventListener('click',resetCalculator);updateGatherRates();initializeUI();updateUI()};
+const tabButtons=document.querySelectorAll('.tab-button');let buildingsLoaded=false;let unitsLoaded=false;let civsLoaded=false;tabButtons.forEach(btn=>{btn.addEventListener('click',()=>{const target=btn.dataset.target;tabButtons.forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.getElementById(target).classList.add('active');if(target==='building-tab'&&!buildingsLoaded){window.initBuildings();buildingsLoaded=true}else if(target==='unit-tab'&&!unitsLoaded){window.initUnits();unitsLoaded=true}else if(target==='civ-tab'&&!civsLoaded){window.initCivs();civsLoaded=true}})});window.initBuildings();buildingsLoaded=true;
+window.initCivs = function() {
+  const civData = {
+    'Armenians': {
+      'overview': 'Defensive civilization with durable buildings, strong composite archers, enhanced trade via Mule Carts, and monk support. Strong in late-game turtling and team games, reliable on closed/hybrid maps, solid vs infantry comps).',
+      'advantages': [
+        'Buildings +10% HP per age (up to +40% in Imperial)',
+        'Composite Bowman: powerful anti-infantry foot archer',
+        'Mule Carts improve resource transport and trade efficiency',
+        'Monks heal 50% faster; Warrior Priests tanky monk unit',
+        'Strong relic gold generation and team tech sharing',
+        'Excellent defensive scaling'
+      ],
+      'disadvantages': [
+        'Limited cavalry (no Paladin)',
+        'Weak early aggression on open maps',
+        'Expensive unique techs',
+        'Vulnerable to heavy siege/gunpowder'
+      ]
+    },
+    'Aztecs': {
+      'overview': 'Aggressive infantry civilization with fast unit creation and superior monks. Relics power endless pressure; strong in mid/late infantry fights, top-tier Arabia pick for monk/relic plays).',
+      'advantages': [
+        'Military units created faster (scaled by age)',
+        'Start with Eagle Scout and +50 gold',
+        'Eagle/Jaguar Warriors dominate infantry matchups',
+        'Monks +5 HP per monastery technology',
+        'Garrisoned relics boost population',
+        'Excellent sustainability and trash wars'
+      ],
+      'disadvantages': [
+        'No cavalry units',
+        'Weak siege and gunpowder',
+        'Vulnerable to early knight/archer rushes',
+        'Limited early defenses'
+      ]
+    },
+    'Bengalis': {
+      'overview': 'Elephant civilization with tanky units, population bonuses, and strong navy. Great for water/hybrid and late Imperial deathballs, powerful elephant pushes post recent buffs).',
+      'advantages': [
+        '+2 villagers on each age advance',
+        'Elephants take -25% bonus damage and resist conversion',
+        'Ships regenerate 15 HP/min',
+        'Battle/War Elephants highly durable',
+        'Ratha switches between ranged/melee',
+        'Strong monk and naval options'
+      ],
+      'disadvantages': [
+        'No early eco bonuses',
+        'Missing Thumb Ring (inaccurate archers)',
+        'Limited cavalry (no Paladin)',
+        'Slow land map start'
+      ]
+    },
+    'Berbers': {
+      'overview': 'Mobile cavalry civilization with fast villagers and powerful camels. Ideal for raiding and map control, strong Arabia for cav archer/camel aggression).',
+      'advantages': [
+        'Villagers move +10% faster',
+        'Stable units cheaper in Castle/Imperial',
+        'Camel Riders and Genitours elite counters',
+        'Strong raiding and hit-and-run',
+        'Cheaper ships for navy support',
+        'Kasbah boosts ally Castle production'
+      ],
+      'disadvantages': [
+        'Weak archers (missing key armor)',
+        'Limited early defenses',
+        'Struggles vs mass infantry/siege',
+        'No major late eco spike'
+      ]
+    },
+    'Bohemians': {
+      'overview': 'Gunpowder and monk civilization with tanky Hussite Wagons and free Chemistry. Late-game gunpowder dominant, feared wagon/hand cannoneer pushes).',
+      'advantages': [
+        'Free Chemistry; elite Hand Cannoneers/BBC',
+        'Monks faster redemption and relic pickup',
+        'Hussite Wagon durable ranged siege',
+        'Cheaper mining techs',
+        'Strong alchemy and farming bonuses',
+        'Powerful late pushes'
+      ],
+      'disadvantages': [
+        'No Paladin',
+        'Weak cavalry archers',
+        'Expensive unique units',
+        'Vulnerable early'
+      ]
+    },
+    'Britons': {
+      'overview': 'Long-range archer civilization with elite Longbowmen. Open map mass archer powerhouse, consistent top-tier Arabia, trash war dominant).',
+      'advantages': [
+        'Foot archers +1 range Castle/+1 Imperial',
+        'Town Centers cheaper in later ages',
+        'Elite Longbowmen extreme range',
+        'Faster herdables control',
+        'Strong vs infantry mass',
+        'Excellent late trash wars'
+      ],
+      'disadvantages': [
+        'Weak cavalry (no Paladin)',
+        'Limited melee options',
+        'Vulnerable to siege/skirms',
+        'Low unit diversity'
+      ]
+    },
+    'Bulgarians': {
+      'overview': 'Infantry/cavalry hybrid with free blacksmith upgrades and Krepost flexibility. Strong mid-game timings, versatile all-rounder, Konnik spam reliable).',
+      'advantages': [
+        'Free Militia-line upgrades to Champion',
+        'Krepost for forward Konnik production',
+        'Stirrups faster cavalry attack',
+        'Cheaper Town Centers',
+        'Strong cavalry and siege',
+        'Aggressive mid-game power'
+      ],
+      'disadvantages': [
+        'Missing Arbalester',
+        'Limited defenses',
+        'No Paladin',
+        'Requires aggressive play'
+      ]
+    },
+    'Burgundians': {
+      'overview': 'Economic cavalry civilization with early tech access and powerful Coustillier. Strong mid/late cavalry, solid knight pushes).',
+      'advantages': [
+        'Economic upgrades one age earlier',
+        'Cheaper stable techs',
+        'Elite Coustillier charge attack',
+        'Strong knights and gunpowder',
+        'Good eco boom',
+        'Versatile late army'
+      ],
+      'disadvantages': [
+        'Weak archers',
+        'Limited defenses',
+        'Expensive unique unit',
+        'Vulnerable to camels'
+      ]
+    },
+    'Burmese': {
+      'overview': 'Infantry/elephant civilization with cheap monastery techs and strong Battle Elephants. Monk synergy strong, elephant/monk comps viable on hybrid).',
+      'advantages': [
+        'Free Lumber Camp upgrades',
+        'Monastery techs 50% cheaper',
+        'Elite Battle Elephants with bonus damage',
+        'Infantry armor bonuses',
+        'Strong monks and relics',
+        'Good vs cavalry'
+      ],
+      'disadvantages': [
+        'Weak archers',
+        'Limited early defenses',
+        'Weak navy',
+        'Slow units'
+      ]
+    },
+    'Byzantines': {
+      'overview': 'Defensive civilization with tanky buildings and cheap counter units. Versatile defense, strong team games turtling).',
+      'advantages': [
+        'Buildings +10-40% HP by age',
+        'Counter units (skirms/spears/camels) cheaper',
+        'Strong monks and navy',
+        'Fast age advance',
+        'Excellent defensive options',
+        'Versatile tech tree'
+      ],
+      'disadvantages': [
+        'Weak early eco',
+        'Limited siege power',
+        'No major power unit',
+        'Expensive elite upgrades'
+      ]
+    },
+    'Celts': {
+      'overview': 'Infantry/siege civilization with fast wood and speedy infantry. Siege push strong, strong closed maps, siege scary).',
+      'advantages': [
+        'Lumberjacks +15% faster',
+        'Infantry move faster',
+        'Siege weapons +20% HP and faster fire',
+        'Woad Raiders fast infantry',
+        'Strong wood eco',
+        'Powerful siege rams'
+      ],
+      'disadvantages': [
+        'Weak gunpowder/archers',
+        'Limited cavalry',
+        'Vulnerable to archer rush',
+        'Open map struggles'
+      ]
+    },
+    'Chinese': {
+      'overview': 'Versatile civilization with strong start and cheap techs. All-rounder boom, top eco for fast Castle/Imperial).',
+      'advantages': [
+        'Start +3 villagers (-150 food)',
+        'Technologies 10-20% cheaper by age',
+        'Town Centers +10 population',
+        'Chu Ko Nu powerful ranged unit',
+        'Strong eco boom',
+        'Full tech tree versatility'
+      ],
+      'disadvantages': [
+        'Weak early food eco',
+        'No major specialization',
+        'Vulnerable Dark/Feudal',
+        'Relies on strong start execution'
+      ]
+    },
+    'Cumans': {
+      'overview': 'Aggressive cavalry civilization with early second TC and fast cav archers. Early pressure strong, strong Feudal aggression).',
+      'advantages': [
+        'Second TC in Feudal Age',
+        'Cavalry +5 HP per age',
+        'Steppe Lancer fast production',
+        'Faster cavalry archer creation',
+        'Strong early/mid aggression',
+        'Good mobility'
+      ],
+      'disadvantages': [
+        'Weak infantry',
+        'Limited defenses',
+        'Expensive army',
+        'Late game falls off'
+      ]
+    },
+    'Dravidians': {
+      'overview': 'Infantry/naval civilization with cheap barracks units and strong Urumi. Water/land hybrid, strong water, Urumi counters cav).',
+      'advantages': [
+        'Barracks units -10% cheaper per age',
+        'Fishermen +15% carry',
+        'Elite Urumi Swordsman area damage',
+        'Elephant Archer counters infantry',
+        'Strong navy and skirmishers',
+        'Medical Corps heals infantry'
+      ],
+      'disadvantages': [
+        'Weak cavalry',
+        'Limited archer upgrades',
+        'No Battle Elephants',
+        'Land map struggles'
+      ]
+    },
+    'Ethiopians': {
+      'overview': 'Archer civilization with fast-firing archers and free upgrades. Archer aggression strong, strong archer pushes).',
+      'advantages': [
+        'Free Pikeman/Halberdier upgrade',
+        'Archers +15% fire rate',
+        'Elite Shotel Warrior fast training',
+        'Bonus vs buildings',
+        'Strong archer eco support',
+        'Good late trash'
+      ],
+      'disadvantages': [
+        'Weak cavalry',
+        'Limited siege',
+        'No Bombard Cannon',
+        'Gold heavy'
+      ]
+    },
+    'Franks': {
+      'overview': 'Cavalry civilization with tanky knights and free farm upgrades. Knight rush dominant, top knight civ).',
+      'advantages': [
+        'Free farm upgrades',
+        'Cavalry +20% HP',
+        'Elite Paladin access',
+        'Cheaper Castles',
+        'Strong knights and scouts',
+        'Powerful Castle Age'
+      ],
+      'disadvantages': [
+        'Weak archers',
+        'Limited defenses',
+        'No Crossbow upgrade',
+        'Vulnerable to camels/monks'
+      ]
+    },
+    'Georgians': {
+      'overview': 'Cavalry civilization with tanky units and hill bonuses. Durable mid/late fights, strong team games).',
+      'advantages': [
+        'Units regenerate HP on hills',
+        'Elite Monaspa melee/ranged switch',
+        'Strong cavalry options',
+        'Repair cheaper',
+        'Tanky army composition',
+        'Good vs ranged'
+      ],
+      'disadvantages': [
+        'Weak archers',
+        'Limited infantry',
+        'Expensive unique unit',
+        'Map dependent bonuses'
+      ]
+    },
+    'Goths': {
+      'overview': 'Infantry flood civilization with cheap/fast barracks units. Infantry spam overwhelming, strong post-Imperial floods).',
+      'advantages': [
+        'Infantry 35% cheaper',
+        'Barracks +20% faster work rate',
+        'Elite Huskarl anti-archer',
+        'Infantry +1 attack vs buildings',
+        'Strong vs archers',
+        'Endless spam potential'
+      ],
+      'disadvantages': [
+        'No walls/gates',
+        'Weak early game',
+        'Limited defenses',
+        'Vulnerable to siege'
+      ]
+    },
+    'Gurjaras': {
+      'overview': 'Camel/elephant civilization with food generation and dodging riders. Versatile mounted, strong camel counters).',
+      'advantages': [
+        'Mills generate food on creation',
+        'Shrivamsha Rider dodges projectiles',
+        'Elite Chakram Thrower ranged',
+        'Strong camel and elephant options',
+        'Good food eco',
+        'Unique mounted play'
+      ],
+      'disadvantages': [
+        'Weak siege',
+        'Limited archers',
+        'Expensive unique units',
+        'Slow start'
+      ]
+    },
+    'Hindustanis': {
+      'overview': 'Camel/gunpowder civilization with cheap villagers. Flexible late army, strong camel/hand cannoneer).',
+      'advantages': [
+        'Villagers 5-15% cheaper by age',
+        'Elite Imperial Camel Rider tanky',
+        'Strong gunpowder units',
+        'Good camel counters',
+        'Versatile tech tree',
+        'Long-lasting gold'
+      ],
+      'disadvantages': [
+        'Weak knights',
+        'Limited archers',
+        'Expensive composition',
+        'Early eco fragile'
+      ]
+    },
+    'Huns': {
+      'overview': 'Cavalry raider civilization with no houses and accurate cav archers. Early aggression strong, strong scout/cav archer rush).',
+      'advantages': [
+        'No houses needed (+100 pop space)',
+        'Cavalry archers +20% accuracy',
+        'Tarkans strong vs buildings',
+        'Faster stables',
+        'Early map control',
+        'Strong raiding'
+      ],
+      'disadvantages': [
+        'Weak defenses',
+        'No walls',
+        'Limited infantry',
+        'Late game weaker'
+      ]
+    },
+    'Incas': {
+      'overview': 'Infantry civilization with blacksmith-affected villagers and strong Kamayuk. Defensive eco, reworked for hybrid/water with Champi ships).',
+      'advantages': [
+        'Villagers affected by blacksmith',
+        'Elite Kamayuk anti-cavalry',
+        'Strong Eagle Warriors',
+        'Buildings stone cheaper',
+        'Free llama on start',
+        'New Champi Warrior infantry ship'
+      ],
+      'disadvantages': [
+        'No cavalry',
+        'Weak gunpowder',
+        'Limited siege',
+        'Rework adjusted eco'
+      ]
+    },
+    'Italians': {
+      'overview': 'Naval/archer civilization with cheap age advances and anti-cav crossbows. Water strong, top water civ).',
+      'advantages': [
+        'Age advances 15% cheaper',
+        'Elite Genoese Crossbowman vs cavalry',
+        'Cheaper gunpowder units',
+        'Strong navy and docks',
+        'Condottiero team infantry',
+        'Good trade'
+      ],
+      'disadvantages': [
+        'Weak cavalry',
+        'Limited infantry',
+        'Expensive unique unit',
+        'Land map weaker'
+      ]
+    },
+    'Japanese': {
+      'overview': 'Infantry civilization with fast-attacking melee and strong fishing. Eco flexible, strong infantry plays).',
+      'advantages': [
+        'Infantry +10-25% attack speed by age',
+        'Fishing ships 2x HP and faster',
+        'Elite Katana Samurai fast',
+        'Cheaper mills/lumber/mining',
+        'Strong unique units',
+        'Good eco on fish'
+      ],
+      'disadvantages': [
+        'Weak cavalry',
+        'Limited gunpowder',
+        'Expensive monks',
+        'No strong siege'
+      ]
+    },
+    'Jurchens': {
+      'overview': 'Aggressive cavalry civilization with early attack speed bonuses and strong mounted units. Timing attack focused, strong mid-game cavalry spikes post-Three Kingdoms).',
+      'advantages': [
+        'Early free Stirrups-like bonus for cavalry',
+        'Powerful unique mounted lancers',
+        'Strong siege support',
+        'Versatile cavalry composition',
+        'Fast raiding and mobility',
+        'Good scaling into Imperial'
+      ],
+      'disadvantages': [
+        'Weaker infantry',
+        'Missing archer precision',
+        'Expensive elite units',
+        'Vulnerable to monks'
+      ]
+    },
+    'Khitans': {
+      'overview': 'Mobile cavalry archer civilization with regeneration and scouting bonuses. Hit-and-run specialist, dominant open maps with attack speed buffs).',
+      'advantages': [
+        'Cavalry regenerate HP',
+        'Elite cavalry archers high mobility',
+        'Strong scouting and map control',
+        'Versatile tech tree',
+        'Powerful raiding',
+        'Good team support'
+      ],
+      'disadvantages': [
+        'Weak infantry',
+        'Limited defenses',
+        'Expensive upkeep',
+        'Struggles closed/water'
+      ]
+    },
+    'Khmer': {
+      'overview': 'Elephant/siege civilization with no building prereqs and tanky elephants. Flexible builds, strong elephant/scorpion pushes).',
+      'advantages': [
+        'No building prerequisites',
+        'Elite Battle Elephants faster move',
+        'Elite Ballista Elephant ranged siege',
+        'Villagers garrison houses',
+        'Strong siege options',
+        'Good vs infantry'
+      ],
+      'disadvantages': [
+        'Weak late eco',
+        'Limited defenses',
+        'Expensive army',
+        'Slow units'
+      ]
+    },
+    'Koreans': {
+      'overview': 'Defensive tower civilization with tanky War Wagons. Turtle strong, strong defense on closed maps).',
+      'advantages': [
+        'Towers +1-3 range by age',
+        'Elite War Wagon tanky ranged',
+        'Panokseon turtle ship',
+        'Cheaper stone mining',
+        'Strong defenses',
+        'Good vs siege'
+      ],
+      'disadvantages': [
+        'Weak cavalry',
+        'Slow unique units',
+        'Limited early aggression',
+        'Wood heavy'
+      ]
+    },
+    'Lithuanians': {
+      'overview': 'Cavalry/monk civilization with relic bonuses and fast Leitis. Relic aggressive, strong with relics).',
+      'advantages': [
+        'Start +150 food',
+        '+2 attack per garrisoned relic (max +10)',
+        'Elite Leitis ignores armor',
+        'Faster monastery work',
+        'Strong knights/Paladins',
+        'Monk/relic synergy'
+      ],
+      'disadvantages': [
+        'Weak archers',
+        'Limited siege',
+        'Relic dependent',
+        'No strong eco'
+      ]
+    },
+    'Magyars': {
+      'overview': 'Cavalry civilization with free scout upgrades and mobile Huszar. Raider strong, strong scout/cav plays).',
+      'advantages': [
+        'Free scout line attack upgrades',
+        'Elite Magyar Huszar gold raid',
+        'Cheaper scouts',
+        'Strong cavalry archers',
+        'Good mobility',
+        'Versatile cav'
+      ],
+      'disadvantages': [
+        'Weak infantry',
+        'Limited siege',
+        'No Paladin',
+        'Vulnerable monks'
+      ]
+    },
+    'Malay': {
+      'overview': 'Naval civilization with cheap/fast age ups and cheap Karambits. Water/infantry spam, strong water, endless Karambit).',
+      'advantages': [
+        'Age ups 66% cheaper and faster',
+        'Elite Karambit Warrior cheap spam',
+        'Battle Elephants cheaper',
+        'Strong navy',
+        'Endless cheap infantry',
+        'Fast timings'
+      ],
+      'disadvantages': [
+        'Weak cavalry',
+        'Limited defenses',
+        'Weaker units individually',
+        'Land struggles'
+      ]
+    },
+    'Malians': {
+      'overview': 'Infantry civilization with gold eco and cheap buildings. Infantry/gold strong, strong Gbeto raids).',
+      'advantages': [
+        'Buildings cheaper wood',
+        'Gold mines last longer',
+        'Elite Gbeto ranged infantry',
+        'Farimba faster cavalry attack',
+        'Strong infantry',
+        'Good gold sustainability'
+      ],
+      'disadvantages': [
+        'Weak cavalry',
+        'Limited siege',
+        'No Arbalester',
+        'Vulnerable gunpowder'
+      ]
+    },
+    'Mapuche': {
+      'overview': 'Guerrilla civilization with ramping attack speed and unconventional cavalry counters. Defensive hit-and-run strong, emerging strong on hybrid/forest, Bolas slow scary).',
+      'advantages': [
+        'Infantry/Skirmishers/Slingers gain attack speed per age',
+        'Kona melee cav bonus vs injured',
+        'Elite Bolas Rider slows enemies',
+        'Malon pass-through damage for ranged',
+        'Champi Warrior regional ship',
+        'Strong anti-cav and guerrilla'
+      ],
+      'disadvantages': [
+        'Limited heavy cavalry',
+        'Weaker siege',
+        'Vulnerable gunpowder',
+        'Slower boom'
+      ]
+    },
+    'Mayans': {
+      'overview': 'Archer civilization with cheap/long-lasting resources and Elite Eagle Warriors. Archer/eagle strong, top archer civ).',
+      'advantages': [
+        'Resources last 15% longer',
+        'Archers 10-20% cheaper by age',
+        'Elite Eagle Warrior fast mobility',
+        'Plumed Archer anti-infantry',
+        'Strong eco',
+        'Powerful archer spam'
+      ],
+      'disadvantages': [
+        'No cavalry',
+        'Weak late eco',
+        'Limited siege',
+        'Vulnerable monks'
+      ]
+    },
+    'Mongols': {
+      'overview': 'Cavalry archer civilization with fast Mangudai and mobile siege. Raid aggressive, strong scout/cav archer rush).',
+      'advantages': [
+        'Cavalry archers +15% fire rate',
+        'Elite Mangudai bonus vs siege',
+        'Hunters +50% carry',
+        'Steppe Lancer strong',
+        'Faster siege',
+        'Excellent mobility'
+      ],
+      'disadvantages': [
+        'Weak infantry',
+        'Limited defenses',
+        'No Bombard Cannon',
+        'Open map dependent'
+      ]
+    },
+    'Muisca': {
+      'overview': 'Economic gold civilization with healing buildings and deadly ranged units. Boom/relic strong, top boomer, Guecha heal unique).',
+      'advantages': [
+        'Age advances cheaper gold',
+        'Settlements heal nearby units',
+        'Elite Guecha Warrior javelin + heal on death',
+        'Elite Temple Guard ramps attack speed',
+        'Huaracas faster slingers +range',
+        'Strong gold/relic eco'
+      ],
+      'disadvantages': [
+        'Weak cavalry',
+        'Limited heavy siege',
+        'Gold dependent',
+        'Vulnerable early rush'
+      ]
+    },
+    'Persians': {
+      'overview': 'Cavalry civilization with fast TC/dock work and tanky War Elephants. Boom/elephant strong, strong dock/TC boom).',
+      'advantages': [
+        'TC/dock +10-20% work rate by age',
+        'Elite War Elephant tanky',
+        'Mahouts faster elephants',
+        'Boiling Oil vs rams',
+        'Strong cavalry',
+        'Good trade/navy'
+      ],
+      'disadvantages': [
+        'Weak archers',
+        'Expensive elephants',
+        'Limited infantry',
+        'Slow elephants'
+      ]
+    },
+    'Poles': {
+      'overview': 'Cavalry civilization with Folwark food and armor-removing Obuch. Cavalry/infantry hybrid, strong light cav, Obuch counters armor).',
+      'advantages': [
+        'Folwark replaces Mill, generates food',
+        'Scout line cheaper',
+        'Elite Obuch removes armor',
+        'Elite Lechia winged hussar',
+        'Strong light cavalry',
+        'Good eco trickle'
+      ],
+      'disadvantages': [
+        'Weak archers',
+        'Limited siege',
+        'Expensive unique unit',
+        'Vulnerable ranged'
+      ]
+    },
+    'Portuguese': {
+      'overview': 'Naval/gunpowder civilization with gold-cheap units and free cartography. Water/trade strong, top water/gunpowder).',
+      'advantages': [
+        'All units -20% gold cost',
+        'Elite Organ Gun/Feitoria strong',
+        'Caravel anti-ship',
+        'Free cartography',
+        'Strong navy/gunpowder',
+        'Excellent trade'
+      ],
+      'disadvantages': [
+        'Weak cavalry',
+        'Limited infantry',
+        'Expensive techs',
+        'Land weaker'
+      ]
+    },
+    'Romans': {
+      'overview': 'Infantry civilization with cheap Legionaries and strong siege. Infantry push strong, strong Centurion counters, scorpion cheap).',
+      'advantages': [
+        'Legionary cheap/tanky infantry',
+        'Scorpions -gold cost',
+        'Elite Centurion bonus vs cavalry',
+        'Galatia Guard blacksmith bonus',
+        'Strong infantry/siege',
+        'Durable buildings'
+      ],
+      'disadvantages': [
+        'Weak cavalry',
+        'Limited archers',
+        'Expensive unique units',
+        'Slow mobility'
+      ]
+    },
+    'Saracens': {
+      'overview': 'Camel/naval civilization with market bonus and strong camels. Trade/camel strong, strong market abuse, camel counters).',
+      'advantages': [
+        'Market 5% bonus trade',
+        'Elite Camel Rider tanky',
+        'Mameluke anti-cavalry ranged',
+        'Strong monks and navy',
+        'Good gunpowder',
+        'Versatile counters'
+      ],
+      'disadvantages': [
+        'Weak knights',
+        'Limited defenses',
+        'No Halberdier',
+        'Gold heavy'
+      ]
+    },
+    'Shu': {
+      'overview': 'Balanced defensive civilization with strong crossbowmen and monk play. Turtle to Imperial strong, reliable eco/monk team games).',
+      'advantages': [
+        'Strong early eco bonuses',
+        'Elite crossbowmen',
+        'Powerful monk synergy',
+        'Versatile units',
+        'Good defensive scaling',
+        'Unique hero support'
+      ],
+      'disadvantages': [
+        'No extreme spike',
+        'Average mobility',
+        'Expensive unique units',
+        'Vulnerable early cavalry'
+      ]
+    },
+    'Sicilians': {
+      'overview': 'Tanky civilization with bonus damage reduction and building Serjeants. Defensive strong, tanky vs bonus damage).',
+      'advantages': [
+        'Units -25-33% bonus damage taken',
+        'Elite Serjeant builds Donjons',
+        'First Crusade spawns Serjeants',
+        'Strong infantry and defenses',
+        'Tanky army',
+        'Good vs cavalry'
+      ],
+      'disadvantages': [
+        'Weak archers',
+        'Limited cavalry',
+        'Slow unique units',
+        'Vulnerable gunpowder'
+      ]
+    },
+    'Slavs': {
+      'overview': 'Infantry/siege civilization with fast farms and tanky Boyars. Siege/infantry strong, strong Druzhina infantry).',
+      'advantages': [
+        'Farmers +15% faster',
+        'Siege cheaper/faster',
+        'Elite Boyar tanky cavalry',
+        'Druzhina area splash infantry',
+        'Strong siege pushes',
+        'Good late army'
+      ],
+      'disadvantages': [
+        'Weak archers',
+        'Limited defenses',
+        'No Arbalester',
+        'Vulnerable ranged'
+      ]
+    },
+    'Spanish': {
+      'overview': 'Gunpowder/monk civilization with fast builders and mobile Conquistadors. Gunpowder strong, strong trade/gunpowder).',
+      'advantages': [
+        'Builders +30% faster',
+        'Elite Conquistador mobile gunpowder',
+        'Missionaries fast monks',
+        'Strong gunpowder/hand cannoneers',
+        'Trade bonus',
+        'Fast timings'
+      ],
+      'disadvantages': [
+        'Weak archers',
+        'Limited cavalry',
+        'Expensive techs',
+        'Vulnerable infantry'
+      ]
+    },
+    'Tatars': {
+      'overview': 'Cavalry archer civilization with free Thumb Ring and hill bonuses. Raider strong, strong hills, Keshik gold gen).',
+      'advantages': [
+        'Free Thumb Ring/Parthian Tactics',
+        'Elite Keshik gold on kill',
+        'Flaming Camel anti-elephant',
+        '+50% hill HP bonus',
+        'Strong cav archers',
+        'Good raiding'
+      ],
+      'disadvantages': [
+        'Weak infantry',
+        'Limited defenses',
+        'Expensive unique units',
+        'Map dependent'
+      ]
+    },
+    'Teutons': {
+      'overview': 'Infantry civilization with tanky buildings and slow Teutonic Knights. Turtle strong, strong late tanky infantry).',
+      'advantages': [
+        'Barracks/Monastery cheaper',
+        'Elite Teutonic Knight tanky',
+        'Capped Ram strong',
+        'Free Murder Holes',
+        'Strong defenses',
+        'Monk resistance'
+      ],
+      'disadvantages': [
+        'Slow units',
+        'Weak cav archers',
+        'Limited mobility',
+        'Vulnerable ranged'
+      ]
+    },
+    'Tupi': {
+      'overview': 'Aggressive raiding civilization with cheap paired archers and poison damage. Sustained pressure strong, high aggression, poison structures scary).',
+      'advantages': [
+        'Start +25 each resource',
+        'Blackwood Archers train in pairs/cheap',
+        'Elite Ibirapema area damage infantry',
+        'Curare poison on archers/structures',
+        'Caciques faster slingers/Champi',
+        'Strong ranged spam/raiding'
+      ],
+      'disadvantages': [
+        'Weak heavy cavalry',
+        'Limited siege',
+        'Map dependent (jungle/hybrid)',
+        'Struggles vs tanky civs'
+      ]
+    },
+    'Turks': {
+      'overview': 'Gunpowder civilization with free upgrades and elite Janissaries. Gunpowder strong, strong hand cannoneer/BBC).',
+      'advantages': [
+        'Free Chemistry/light cav upgrades',
+        'Elite Janissary tanky gunpowder',
+        'Hussar +50% HP',
+        'Strong gunpowder/siege',
+        'Good gold mining',
+        'Powerful late army'
+      ],
+      'disadvantages': [
+        'No Pikeman/Halberdier',
+        'Weak early',
+        'Limited anti-cav',
+        'Vulnerable infantry'
+      ]
+    },
+    'Vietnamese': {
+      'overview': 'Archer civilization with revealed map and strong Rattan Archers. Archer ambush strong, strong archer vs archer).',
+      'advantages': [
+        'Enemy positions revealed start',
+        'Elite Rattan Archer tanky vs archers',
+        'Imperial Skirmisher upgrade',
+        'Battle Elephant access',
+        'Strong archers',
+        'Good eco bonuses'
+      ],
+      'disadvantages': [
+        'Weak cavalry',
+        'Limited siege',
+        'No Arbalester',
+        'Vulnerable knights'
+      ]
+    },
+    'Vikings': {
+      'overview': 'Infantry/naval civilization with free cartography and strong Berserks. Water/infantry strong, strong water, free eco techs).',
+      'advantages': [
+        'Free Wheelbarrow/Hand Cart',
+        'Warships 15-20% cheaper',
+        'Elite Berserk regenerates',
+        'Chieftains bonus vs cavalry',
+        'Strong infantry',
+        'Powerful navy'
+      ],
+      'disadvantages': [
+        'Weak cavalry',
+        'Limited gunpowder',
+        'No Arbalester',
+        'Land weaker'
+      ]
+    },
+    'Wei': {
+      'overview': 'Offensive cavalry/gunpowder civilization with tactical bonuses. Mid-game spike strong, aggressive Castle timings).',
+      'advantages': [
+        'Cavalry/gunpowder synergy',
+        'Strong map control bonuses',
+        'Versatile army',
+        'Powerful mid-game attacks',
+        'Good siege',
+        'Fast Imperial options'
+      ],
+      'disadvantages': [
+        'Average eco',
+        'Limited specialization',
+        'Expensive units',
+        'Weak vs monks'
+      ]
+    },
+    'Wu': {
+      'overview': 'Naval/ranged civilization with strong fire ships and water control. Water/hybrid dominant, top water post naval rework).',
+      'advantages': [
+        'Elite fire ship bonuses',
+        'Powerful long-range archers',
+        'Strong water control',
+        'Good siege/ranged',
+        'Excellent trade/islands',
+        'New naval tech access'
+      ],
+      'disadvantages': [
+        'Weak cavalry',
+        'Map dependent',
+        'Limited heavy infantry',
+        'Pure land struggles']}};
+const grid=document.getElementById('civGrid');const searchInput=document.getElementById('civ-searchInput');const createCivCard=(civName,data)=>{const card=document.createElement('div');card.className='civ-card';card.dataset.name=civName.toLowerCase();const advantagesHTML=data.advantages.map(adv=>`<li>${adv}</li>`).join('');const disadvantagesHTML=data.disadvantages.map(dis=>`<li>${dis}</li>`).join('');card.innerHTML=`<div class="civ-name">${civName}</div><div class="civ-description">${data.overview}</div><div class="civ-details"><div class="civ-section"><div class="civ-section-title">Advantages</div><ul class="civ-list civ-advantages">${advantagesHTML}</ul></div><div class="civ-section"><div class="civ-section-title">Disadvantages</div><ul class="civ-list civ-disadvantages">${disadvantagesHTML}</ul></div></div>`;return card};const initializeUI=()=>{const fragment=document.createDocumentFragment();Object.entries(civData).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([civName,data])=>{fragment.appendChild(createCivCard(civName,data))});grid.appendChild(fragment)};const filterCivs=searchTerm=>{const term=(searchTerm||'').toLowerCase().trim();const cards=grid.querySelectorAll('.civ-card');cards.forEach(card=>{const name=card.dataset.name;card.style.display=name.includes(term)?'':'none'})};searchInput.addEventListener('input',debounce(e=>filterCivs(e.target.value),150));initializeUI()};
+</script>
+</body>
+<meta name="msvalidate.01" content="ECF921BEFD5864651F39B16CA43E1423" />
+</html>
